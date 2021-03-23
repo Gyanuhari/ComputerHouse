@@ -1,0 +1,201 @@
+﻿@model ComputerHouse.Models.ViewModels.DeviceBrandCategoryAndBrandVM
+@using ComputerHouse.Extensions
+
+@{
+    ViewData["Title"] = "Edit";
+}
+
+<div class="container">
+    <div class="light-background-with-border">
+        <div class="row">
+            <div class="col">
+                <h4 class="text-primary"><strong>Edit Device</strong></h4>
+            </div>
+        </div>
+        <hr />
+        <form asp-action="Edit" method="post" enctype="multipart/form-data">
+            <input asp-for="Device.Id" type="hidden" />
+            <div asp-validation-summary="ModelOnly"></div>
+            <div class="row">
+                <div class="col-12 d-md-none d-sm-block mb-2">
+                    @{
+                        var base64 = Convert.ToBase64String(Model.Device.Image);
+                        var imgSrc = string.Format("data:image/jpg;base64,{0}", base64);
+                    }
+                    <img src="@imgSrc" style="width:100%; height:250px;" />
+                </div>
+                <div class="col-12 col-md-8">
+                    <div class="row form-group">
+                        <div class="col">
+                            <label asp-for="Device.Name" class="custom-label"></label>
+                            <input asp-for="Device.Name" class="form-control" />
+                            <span asp-validation-for="Device.Name" class="text-danger"></span>
+                        </div>
+                    </div>
+                    <div class="row form-group">
+                        <div class="col-6">
+                            <label asp-for="Device.BrandId" class="custom-label"></label>
+                            <select asp-for="Device.BrandId" asp-items="Model.BrandList.ToSelectListItem(Model.Device.BrandId)" id="brand-id" class="form-control">
+                                <option value="">Select Brand</option>
+                            </select>
+                            <span asp-validation-for="Device.BrandId" class="text-danger"></span>
+                        </div>
+                        <div class="col-6">
+                            <label asp-for="Device.BrandCategoryId" class="custom-label"></label>
+                            <select asp-for="Device.BrandCategoryId" asp-items="Model.BrandCategoryList.ToSelectListItem(Model.Device.BrandCategoryId)"
+                                    id="brand-category-id" class="form-control">
+                                @*name attribute is just to show how can we get data in server side*@
+                                <option value="">Select BrandCategory</option>
+                            </select>
+                            <span asp-validation-for="Device.BrandCategoryId" class="text-danger"></span>
+                        </div>
+                    </div>
+                    <div class="row form-group">
+                        <div class="col-6">
+                            <label asp-for="Device.OSId" class="custom-label"></label>
+                            <select asp-for="Device.OSId" asp-items="Model.OSList.ToSelectListItem(Model.Device.OSId)" class="form-control">
+                                <option value="">Select Operating System</option>
+                            </select>
+                            <span asp-validation-for="Device.OSId" class="text-danger"></span>
+                        </div>
+                        <div class="col-6">
+                            <label asp-for="Device.HDType" class="custom-label"></label>
+                            <select asp-for="Device.HDType" asp-items="Html.GetEnumSelectList<Device.EHDTypes>()" class="form-control">
+                                <option value="">Select HD Types</option>
+                            </select>
+                            <span asp-validation-for="Device.HDType" class="text-danger"></span>
+                        </div>
+                    </div>
+                    <div class="row form-group">
+                        <div class="col-6">
+                            <label asp-for="Device.HDCapacity" class="custom-label"></label>
+                            <select asp-for="Device.HDCapacity" asp-items="Html.GetEnumSelectList<Device.EHDCapacity>()" class="form-control">
+                                <option value="">Select HD Capacity</option>
+                            </select>
+                            <span asp-validation-for="Device.HDCapacity" class="text-danger"></span>
+                        </div>
+                        <div class="col-6">
+                            <label asp-for="Device.RAMCapacity" class="custom-label"></label>
+                            <select asp-for="Device.RAMCapacity" asp-items="Html.GetEnumSelectList<Device.ERAMCapacity>()" class="form-control">
+                                <option value="">Select RAM Capacity</option>
+                            </select>
+                            <span asp-validation-for="Device.RAMCapacity" class="text-danger"></span>
+                        </div>
+                    </div>
+                    <div class="row form-group">
+                        <div class="col">
+                            <div class="row form-group">
+                                <div class="col-6">
+                                    <label asp-for="Device.Price" class="custom-label"></label>
+                                    <input asp-for="Device.Price" class="form-control" />
+                                    <span asp-validation-for="Device.Price" class="text-danger"></span>
+                                </div>
+                                <div class="col-6">
+                                    <label asp-for="Device.ScreenSize" class="custom-label"></label>
+                                    <input asp-for="Device.ScreenSize" class="form-control" placeholder="Eg. 15.50" />
+                                    <span asp-validation-for="Device.ScreenSize" class="text-danger"></span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row form-group">
+                        <div class="col-6">
+                            <input type="checkbox" asp-for="Device.Bluetooth" class="custom-checkbox" />
+                            <label asp-for="Device.Bluetooth" class="custom-label"></label>
+                        </div>
+                        <div class="col-6">
+                            <input type="checkbox" asp-for="Device.HDMI" class="custom-checkbox" />
+                            <label asp-for="Device.HDMI" class="custom-label"></label>
+                        </div>
+
+                    </div>
+                    <div class="row form-group">
+                        <div class="col-6">
+                            <input type="checkbox" asp-for="Device.IsTouchScreen" class="custom-checkbox" />
+                            <label asp-for="Device.IsTouchScreen" class="custom-label"></label>
+                        </div>
+                        <div class="col-6">
+                            <input type="checkbox" asp-for="Device.IsNew" class="custom-checkbox" />
+                            <label asp-for="Device.IsNew" class="custom-label"></label>
+                        </div>
+                    </div>
+                    <div class="row form-group">
+                        <div class="col">
+                            <label asp-for="Device.Image" class="custom-label"></label>
+                            <input asp-for="Device.Image" type="file" multiple name="files" />
+                            @*<span asp-validation-for="Device.Image" class="text-danger"></span>*@
+                        </div>
+                    </div>
+                    <div class="row form-group">
+                        <div class="col-12">
+                            <label asp-for="Device.Description" class="custom-label"></label>
+                            <textarea asp-for="Device.Description" cols="5" rows="3" class="form-control"></textarea>
+                            <span asp-validation-for="Device.Description" class="text-danger"></span>
+                        </div>
+                    </div>
+                    <div class="row form-group">
+                        <div class="col">
+                            <button class="btn btn-lg btn-warning form-control" type="submit">Update</button>
+                        </div>
+                        <div class="col">
+                            <a class="btn btn-lg btn-success form-control" asp-action="Index">To List</a>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-12 col-md-4 d-none d-md-block">
+                    @*@{
+                    These local variables are already defined above.
+                    var base64 = Convert.ToBase64String(Model.Device.Image);
+                    var imgSrc = string.Format("data:image/jpg;base64,{0}", base64);
+                }*@
+                    <img src="@imgSrc" style="width:100%; height:250px;" />
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
+
+
+@section Scripts{
+
+    @*<script src="https://code.jquery.com/jquery-3.4.1.min.js"
+        integrity="sha256-CSXorXvZcTkaix6Yvo6HppcZGetbYMGWSFlBw8HfCJo="
+        crossorigin="anonymous"></script>*@
+
+    <script type="text/javascript">
+
+        $(document).ready(function () {
+            //getBrandCategory();
+
+            $("#brand-id").change(function () {
+                getBrandCategory();
+
+            });
+        });
+
+        function getBrandCategory() {
+            var url = '/admin/devices/getBrandCategories';
+            var brandId = $("#brand-id").val();
+
+            $.getJSON(url, { id: brandId }, function (data) {
+                var items = "";
+                console.log(data);
+
+                if (data.length === 0) {
+                    items += "<option value=''>No Data Found</option>";
+                    $("#brand-category-id").html(items);
+                    //$("#brand-category-id").attr("disabled", true);
+                } else {
+                    $.each(data, function (i, brandCategory) {
+                        console.log('Item:' + brandCategory.name);
+                        items += "<option value='" + brandCategory.id + "'>" + brandCategory.name + "</option>";
+                    });
+                    $("#brand-category-id").html(items);
+                }
+            });
+        }
+
+    </script>
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial.cshtml");}
+}
+

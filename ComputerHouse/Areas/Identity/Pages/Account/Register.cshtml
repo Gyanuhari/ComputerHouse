@@ -1,0 +1,92 @@
+﻿@page
+@model RegisterModel
+@{
+    ViewData["Title"] = "Register";
+}
+
+
+    @*For large Modal <div class="modal fade" role="dialog" id="detail-modal">*@
+    @*<div class="modal fade bd-example-modal-lg" role="dialog" id="detail-modal">
+    <div class="modal-dialog modal-lg">*@
+    <div class="modal fade" role="dialog" tabindex="-1" id="register-modal">
+        @*For tabindex:https://medium.com/@islam.sayed8/trap-focus-inside-a-modal-aa5230326c1b*@
+        <div class="modal-dialog" style="top:15%">
+            <div class="modal-content">
+                <div class="modal-body register-form">
+                    @*Start*@
+                        <div class="row">
+                            <div class="col-12 text-center">
+                                <h4>Create a new account.</h4>
+                            </div>
+                        </div>
+                        <hr />
+                        <div class="row">
+                            <div class="col-12">
+                                <form asp-route-returnUrl="@Model.ReturnUrl" method="post">
+                                    <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+                                    <div class="form-group">
+                                        @*<label asp-for="Input.FirstName" class="custom-label"></label>*@
+                                        <input asp-for="Input.FirstName" class="form-control" placeholder="Your First Name" />
+                                        <span asp-validation-for="Input.FirstName" class="text-danger"></span>
+                                    </div>
+                                    <div class="form-group">
+                                        @*<label asp-for="Input.LastName" class="custom-label"></label>*@
+                                        <input asp-for="Input.LastName" class="form-control" placeholder="Your Last Name" />
+                                        <span asp-validation-for="Input.LastName" class="text-danger"></span>
+                                    </div>
+                                    <div class="form-group">
+                                        @*<label asp-for="Input.PhoneNumber" class="custom-label"></label>*@
+                                        <input asp-for="Input.PhoneNumber" class="form-control" placeholder="Mobile Eg. 0450956465" />
+                                        <span asp-validation-for="Input.PhoneNumber" class="text-danger"></span>
+                                    </div>
+                                    <div class="form-group">
+                                        @*<label asp-for="Input.Email" class="custom-label"></label>*@
+                                        <input asp-for="Input.Email" class="form-control" placeholder="Your Email" />
+                                        <span asp-validation-for="Input.Email" class="text-danger"></span>
+                                    </div>
+                                    <div class="form-group">
+                                        @*<label asp-for="Input.Password" class="custom-label"></label>*@
+                                        <input asp-for="Input.Password" class="form-control" placeholder="Create Password" />
+                                        <span asp-validation-for="Input.Password" class="text-danger"></span>
+                                    </div>
+                                    <div class="form-group mb-0">
+                                        @*<label asp-for="Input.ConfirmPassword" class="custom-label"></label>*@
+                                        <input asp-for="Input.ConfirmPassword" class="form-control" placeholder="Confirm Password" />
+                                        <span asp-validation-for="Input.ConfirmPassword" class="text-danger"></span>
+                                    </div>
+                                    <div>
+                                        <input asp-for="Input.EmailSubscribe" type="checkbox" class="custom-checkbox" />
+                                        <label asp-for="Input.EmailSubscribe" class="custom-label"></label>
+                                    </div>
+                                    <div class="row form-group">
+                                        <div class="col-6">
+                                            <button type="submit" class="btn btn-lg btn-primary form-control">Register</button>
+                                        </div>
+                                        <div class="col-6">
+                                            <a asp-action="Index" asp-controller="Home" asp-area="Customer" class="btn btn-lg btn-secondary form-control">Not Now</a>
+                                        </div>
+                                    </div>
+                                </form>
+                            </div>
+                        </div>
+                    @*End*@
+                </div>
+            </div>
+        </div>
+    </div>
+
+@section Scripts{
+
+    <partial name="_ValidationScriptsPartial" />
+
+    <script type="text/javascript">
+        $(document).ready(function () {
+            $("#register-modal").modal({ backdrop: 'static', keyboard: false });
+        });
+    </script>
+}
+
+
+@*@section Scripts {
+        <partial name="_ValidationScriptsPartial" />
+    }*@

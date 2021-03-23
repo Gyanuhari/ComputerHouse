@@ -1,0 +1,296 @@
+﻿@model ComputerHouse.Models.ViewModels.ShoppingListBrandListVM
+@{
+    ViewData["Title"] = "Index";
+}
+
+
+<div class="container">
+    @*First Show without using acrodonion
+        <div class="row">
+            <ul class="shopping-brand-filter-container">
+                <li class="shopping-brand-filter-item"><a asp-action="Index"
+                        asp-route-brandName="" class="btn btn-lg btn-outline-primary p-2">All</a></li>
+                @foreach (var item in Model.BrandList)
+                {
+                    <li class="shopping-brand-filter-item"><a asp-action="Index" asp-route-brandName="@item.Name"
+                        class="btn btn-outline-primary nav-link">@item.Name</a></li>
+                }
+            </ul>
+        </div>*@
+
+    @*If you have more than one selecting categories than you iterate here.*@
+    <div class="row">
+        <a class="btn accordion-brand"><h5 class="d-inline">Click To Select Brand</h5><span><i class="arrow down"></i></span></a>
+        <div class="panel">
+            <div class="row">
+                <ul class="shopping-brand-filter-container">
+                    <li class="shopping-brand-filter-item">
+                        <a asp-action="Index"
+                           asp-route-brandName="" class="btn btn-outline-primary nav-link">All</a>
+                    </li>
+                    @foreach (var item in Model.BrandList)
+                    {
+                        <li class="shopping-brand-filter-item">
+                            <a asp-action="Index" asp-route-brandName="@item.Name"
+                               class="btn btn-outline-primary nav-link">@item.Name</a>
+                        </li>
+                    }
+                </ul>
+            </div>
+        </div>
+    </div>
+
+    @if (Model.DeviceList != null && Model.DeviceList.Count() > 0)
+    {
+        @*<br />*@
+        <div class="row">
+            @foreach (var item in Model.DeviceList)
+            {
+                <div class="col-md-4 pt-0 new-product">
+                    <div class="main-card">
+                        @{
+                            var base64 = Convert.ToBase64String(item.Image);
+                            var imgSrc = string.Format("data:image/jpg;base64,{0}", base64);
+                                         //This part is concating two string.
+                        }
+                        <img class="card-img-top p-2" src="@imgSrc" alt="Card image cap" style="height:250px; width:100%;" />
+                        <div class="card-body text-center">
+                            <h4 class="card-title"><strong>@item.Name</strong></h4>
+                            <p class="card-text">
+                                @{
+                                    var desc = "";
+                                    desc = string.Concat(item.Description.Substring(0, 110), "....");
+                                }
+                                @desc
+                            </p>
+                            <span class="rate-device">
+                                @for (var i = 0; i < item.Rated; i++)
+                                {
+                                    <i class="fas fa-star"></i>
+                                }
+                                @for (var i = 0; i < (5 - item.Rated); i++)
+                                {
+                                    <i class="far fa-star"></i>
+                                }
+                            </span>
+                            <br />
+                            <br />
+                            <h4>@string.Format("{0:c}", item.Price)</h4>
+                            <br />
+                            <ul>
+                                <li><a asp-controller="Shoppings" asp-action="AddToWishList" asp-route-id="@item.Id"><i class="fas fa-heart"></i></a></li>
+                                @*<li><a asp-controller="Shoppings" asp-action="Detail" asp-route-id="@item.Id"><i class="fas fa-search-plus"></i></a></li>*@
+                                <li><a onclick='quickView("@item.Id")'><i class="fas fa-search-plus"></i></a></li>
+                                <li><a asp-controller="Shoppings" asp-action="AddToCart" asp-route-id="@item.Id"><i class="fas fa-cart-plus"></i></a></li>
+                            </ul>
+                        </div>
+                        @if (item.Quantity <= 5)
+                        {
+                            <div class="badge badge-light item-stock-info">Only @item.Quantity Remaining</div>
+                        }
+                    </div>
+                </div>
+            }
+        </div>
+    }
+    else
+    {
+        <div class="row light-background-with-border">
+            <p><h6 class="text-primary">There are no item.....</h6></p>
+        </div>
+    }
+</div>
+
+<!--Modal Popup For Quick View-->
+<div class="modal fade bd-example-modal-lg" role="dialog" id="quick-view-modal">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-body">
+                @*Start*@
+                <div class="light-background-with-border">
+                    <div class="row">
+                        <div class="col-12 col-md-5">
+                            @*@{
+                                    var base64 = Convert.ToBase64String(Model.Image);
+                                    var imgSrc = string.Format("data:image/jpg;base64,{0}", base64);
+                                }*@
+                            <img id="img-device" src="" class="img-fluid" />
+                        </div>
+                        <div class="col-12 col-md-7">
+                            <h3 id="modal-device-name"></h3>
+                            <hr />
+                            <h3 id="modal-device-price"></h3>
+                            <hr />
+                            <a href="#" id="features">See all features</a>
+                            <br />
+                            <hr />
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col">
+                            <p id="modal-device-description"></p>
+                            <hr />
+                            <div class="row">
+                                <div class="col-6 offset-6 text-right">
+                                    <a class="btn btn-lg btn-light form-control" data-dismiss="modal"><b>CLOSE</b></a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                @*End*@
+            </div>
+        </div>
+    </div>
+</div>
+<!--End Of Modal Popup For Quick View-->
+
+<script>
+    //For Accordion Arrow
+    var acc = document.getElementsByClassName("accordion-brand");
+    var i;
+    for (i = 0; i < acc.length; i++) {
+        acc[i].addEventListener("click", function () {
+            this.classList.toggle("active");
+            $('.arrow').toggleClass('down up');
+            var panel = this.nextElementSibling;
+            if (panel.style.display === "block") {
+                //panel.style.display = "none";
+                $(".panel").slideUp("slow");
+            } else {
+                //panel.style.display = "block";
+                $(".panel").slideDown("slow");
+            }
+        });
+    }
+
+    //$('.sometrigger').click(function () {
+    //    $('#target').toggleClass('fa-angle-down');
+    //    $('#target').toggleClass('fa-angle-up');
+    //});
+
+
+    function quickView(id) {
+        var isOk = false;
+        var error = "";
+        var response = "";
+
+        //Clearing previous values appended values
+        $("#modal-device-name").empty();
+        $("#modal-device-description").empty();
+
+
+        console.log(id);
+
+        $.ajax({
+            url: '/api/device/' + id, //id is a part of url
+            type: 'GET',
+            cache: false,
+            contentType: 'application/json',
+            dataType: 'json'
+            //We do not need datatype because we are not expecting any data
+        })
+            .done(function (res) {
+                response = res;
+                isOk = true;
+            })
+            .fail(function (err) {
+                error = err;
+            })
+            .always(function () {
+                if (isOk) {
+                    $("#quick-view-modal").modal({ backdrop: 'static', keyboard: false });
+                    $("#modal-device-name").append(response.name);
+                    $("#modal-device-description").append(response.description);
+                    //console.log(response);
+
+                    //For appending the price of the device
+                    //const str2 = str1.concat(' ', 'World');
+                    //$("#modal-device-price").text(response.price);
+
+                    const formatter = new Intl.NumberFormat('en-US', {
+                        style: 'currency',
+                        currency: 'AUD',
+                        minimumFractionDigits: 2
+                    })
+                    //formatter.format(10) // "$10.00"
+                    //formatter.format(123233000) // "$123,233,000.00"
+                    var price = formatter.format(response.price) // "$1,000.00"
+                    $("#modal-device-price").text(price);
+
+                    $("#features").attr("href","/Customer/Shoppings/Detail/" + id);
+
+                    //For appending the image of the device
+                    //$("img-device").attr('src', response.image);
+
+                    //base64 = base64js.fromByteArray(response.image);
+                    //$('#img-device').attr('src', 'data:image/jpeg;base64,'+ base64);
+
+                    $('#img-device').attr('src', 'data:image/jpg;base64,' + response.image);
+                    //It is already changed by HTTP to string because of Web API
+
+                    //console.log(response.image);
+
+                } else {
+                    toastr.error("Error: Something went wrong.");
+                    console.log("Something went wrong!");
+                }
+            });
+
+        //$.get('https://localhost:44391/api/device/' + deviceId, function (data, status, xhr) {
+        //    console.log(data);
+        //    console.log('Status:' + status);
+        //    console.log('xhr starts.')
+        //    //console.log(xhr)
+        //})
+        //    .done(function (res) {
+        //        console.log('Msg from done.')
+        //        console.log(res)
+        //    })
+        //    .fail(function (err) {
+        //        console.log('Msg from fail')
+        //        console.log(error)
+        //    })
+        //    .always(function () {
+        //        console.log('Msg from always')
+        //    });
+
+        //$.getJSON('https://localhost:44391/api/device/', { id: deviceId }, function (data, status) {
+        //    console.log('Second Data Start.')
+        //    console.log(data);
+        //    console.log('Status:' + status);
+        //});
+        ////Here data and callback both are optional
+        //data is object data to be send
+        //callback might be a function that executes when it is success
+
+        //$.ajax({
+        //    url: 'https://localhost:44391/api/device/',
+        //    data: { id: deviceId },  //optional parameters
+        //    type: 'GET',
+        //    cache: false,
+        //    contentType: 'application/json',
+        //    dataType: 'json'
+        //    //We do not need datatype because we are not expecting any data
+        //})
+        //    .done(function (res) {
+        //        response = res;
+        //        isOk = true;
+        //    })
+        //    .fail(function (err) {
+        //        error = err;
+        //    })
+        //    .always(function () {
+        //        if (isOk) {
+        //            $("#quick-view-modal").modal({ backdrop: 'static', keyboard: false });
+        //            $("#modal-device-name").append(response.name);
+
+        //            console.log("Everything is Alright");
+        //            console.log(response);
+        //        } else {
+        //            toastr.error("Error: Something went wrong.")
+        //            console.log("Something went wrong!");
+        //        }
+        //    });
+    }
+</script>

@@ -1,0 +1,27 @@
+﻿@model ComputerHouse.Models.ApplicationUser
+@{
+    ViewData["Title"] = "Default";
+    //Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+@{ var name="";
+    var fullName = string.Concat(Model.FirstName, " ", Model.LastName);
+    if(fullName.Length<15)
+    {
+        name = fullName;
+    }
+    else
+    {
+        if(Model.FirstName.Length<15)
+        {
+            name = Model.FirstName;
+        }
+        else
+        {
+            name = "";
+        }
+    }
+ }
+
+Hi! @name
+

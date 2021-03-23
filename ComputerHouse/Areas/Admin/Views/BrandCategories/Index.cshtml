@@ -1,0 +1,378 @@
+﻿@model IEnumerable<ComputerHouse.Models.BrandCategory>
+@{
+    ViewData["Title"] = "Index";
+}
+
+<div class="container">
+    <div class="light-background-with-border">
+        <div class="row mb-3">
+            <div class="col-6">
+                <h4 class="text-primary"><strong>List of Brand's Categories</strong></h4>
+            </div>
+            <div class="col-6 text-right">
+                @await Html.PartialAsync("_CreateNewPartial")
+            </div>
+        </div>
+        <table class="table table-striped table-hover table-bordered" id="categoryTbl">
+            <thead class="table-primary">
+                <tr>
+                    <th>@Html.DisplayNameFor(model => model.Name)</th>
+                    <th>@Html.DisplayNameFor(model => model.Brand.Name)</th>
+                    <!--Later Add CreatedAt and CreatedBy and so on.-->
+                    <th>Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var item in Model)
+                {
+                    <tr>
+                        <td>@Html.DisplayFor(modelItem => item.Name)</td>
+                        <td>@Html.DisplayFor(modelItem => item.Brand.Name)</td>
+                        <td>
+                            @*@await Html.PartialAsync("_TableButtonPartial", item.Id)*@
+                            <a class="btn btn-primary" onclick="editBrandCategory(@item.Id)">
+                                <i class="far fa-edit"></i>&nbsp;Edit
+                            </a>
+                            <a class="btn btn-success" onclick="detailBrandCategory(@item.Id)">
+                                <i class="far fa-list-alt"></i>&nbsp;Details
+                            </a>
+                            <a class="btn btn-danger" onclick="deleteBrandCategory(@item.Id)">
+                                <i class="far fa-trash-alt"></i>&nbsp;Delete
+                            </a>
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+</div>
+
+@*Modal For Editing BrandCategory*@
+<div id="edit-brand-category-modal" class="modal fade" role="dialog">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title"><strong>Edit BrandCategory</strong></h4>
+                <button type="button" class="close text-danger" data-dismiss="modal" aria-hidden="true">&times;</button>
+            </div>
+            <div class="modal-body">
+                <div class="row form-group">
+                    <div class="col">
+                        <label for="edit-brand-category-brand-name-ddl" class="custom-label">Brand Name</label>
+                        <select class="form-control" id="edit-brand-category-brand-name-ddl">
+                            @*<option value=""></option>*@
+                        </select>
+                    </div>
+                </div>
+                <div class="row form-group">
+                    <div class="col">
+                        <label for="edit-brand-category-category-name" class="custom-label">BrandCategory Name</label>
+                        <input class="form-control" id="edit-brand-category-category-name" />
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                @*<div class="row">//Not this because modal-footer has display:flex and justify-content:flex-end*@
+                <div class="col">
+                    <a class="btn btn-warning form-control" onclick="updateBrandCategory()">Update</a>
+                </div>
+                <div class="col">
+                    <a class="btn btn-secondary form-control" data-dismiss="modal">Cancel</a>
+                </div>
+                @*</div>*@
+            </div>
+        </div>
+    </div>
+</div>
+
+@*Modal For Seeing The Detail Of BrandCategory*@
+<div class="modal fade" role="dialog" id="detail-brand-category-modal">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4>Details of BrandCategory</h4>
+                <button type="button" class="close text-danger" data-dismiss="modal" aria-hidden="true">&times;</button>
+            </div>
+            <fieldset disabled>
+                <div class="modal-body">
+                    <div class="row form-group">
+                        <div class="col">
+                            <label for="detail-brand-category-brand-name" class="custom-label">
+                                Brand Name
+                            </label>
+                            <input class="form-control" type="text" id="detail-brand-category-brand-name" />
+                        </div>
+                    </div>
+                    <div class="row form-group">
+                        <div class="col">
+                            <label for="detail-brand-category-category-name" class="custom-label">
+                                Category Name
+                            </label>
+                            <input class="form-control" type="text" id="detail-brand-category-category-name" />
+                        </div>
+                    </div>
+                </div>
+            </fieldset>
+            <div class="modal-footer">
+                <div class="col">
+                    <a class="btn btn-secondary form-control" data-dismiss="modal">Close</a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@*Modal For Deleting The BrandCategory*@
+<div id="delete-brand-category-modal" class="modal fade" role="dialog">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title text-danger"><strong>Delete Confirmation</strong></h4>
+                <button type="button" class="close text-danger" data-dismiss="modal" aria-hidden="true">&times;</button>
+            </div>
+            <div class="modal-body">
+                <h5 class="text-danger">Are you sure, you want to delete this Brand Category???</h5>
+            </div>
+            <div class="modal-footer">
+                <div class="col-4 offset-4">
+                    <a class="btn btn-danger form-control" onclick="deleteConfirmBrandCategory()"> Yes Delete</a>
+                </div>
+                <div class="col-4">
+                    <a class="btn btn-secondary form-control" data-dismiss="modal">No</a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts{
+
+    <script type="text/javascript">
+
+        //BrandCategory API
+        getEditBrandCategoryUrl = '/admin/brandCategories/edit';
+        updateEditBrandCategoryUrl = '/admin/brandCategories/saveEdit';
+        //saveEditBrandCategoryUrl = '/admin/brandCategories/editSave';
+        getDetailBrandCategoryUrl = '/admin/brandCategories/detail';
+        deleteBrandCategoryUrl = '/admin/brandCategories/delete';
+
+        //Edit BrandCategory Stuff
+        var editBrandCategoryModal = $("#edit-brand-category-modal");
+        var editBrandNameDdlEle = $("#edit-brand-category-brand-name-ddl");
+        var editBrandCategoryNameEle = $("#edit-brand-category-category-name");
+
+        //Detail BrandCategory Stuff
+        var detailBrandCategoryModal = $("#detail-brand-category-modal");
+        var detailBrandNameEle = $("#detail-brand-category-brand-name");
+        var detailBrandCategoryNameEle = $("#detail-brand-category-category-name");
+
+        //Delete BrandCategory Stuff
+        var deleteBrandCategoryModal = $("#delete-brand-category-modal");
+
+        //General Stuff
+        var editData = null;
+        var deleteId = null;
+        //var updateEditData = { };
+
+
+        //#region-start Editing BrandCategory
+
+        function editBrandCategory(id) {
+            var isOk = false;
+            var error = null;
+
+            //console.log('Id:'+id);
+            //Avoids repetation in dropdown/clears dropdown
+            editBrandNameDdlEle.empty();
+
+            $.ajax({
+                url: getEditBrandCategoryUrl,
+                type: 'GET',
+                data: { brandCategoryId: id },
+                cache: false,
+                contentType: 'application/json; charset=UTF-8',
+                datatype: 'json'
+            })
+                .done(function (res) {
+                    editData = res;
+                    isOk = true;
+                })
+                .fail(function (err) {
+                    error = err;;
+                })
+                .always(function () {
+                    if (isOk) {
+                        //console.log(editData);
+                        editBrandCategoryModal.modal({ backdrop: 'static', keyboard: false });
+
+                        //console.log(editData.brandCategory.name);
+                        editBrandCategoryNameEle.val(editData.brandCategory.name);
+                        var brandList = editData.brandList;
+                        var ddl = '';
+
+                        $.each(brandList, function (i, brand) {
+                            ddl += "<option value=" + brand.id + ">" + brand.name + "</option>";
+                        });
+                        editBrandNameDdlEle.html(ddl);
+
+                        //To make the edited item to be selected
+                        editBrandNameDdlEle.val(editData.brandCategory.brandId).attr("selected", "selected");
+                    }
+                    else {
+                        console.log('Error:' + error);
+                        toastr.error('Error: Editing Brand Category Unsuccessful!!');
+                    }
+                });
+        }
+
+        function updateBrandCategory() {
+
+
+            //updateEditData.empty;
+            //We can also sent data creating json object however, the recepient in server should be of same type object
+            //updateEditData = { brandId: editBrandNameDdlEle.val(), brandCategoryName: editBrandCategoryNameEle.val() }
+            //console.log('BrandId: ' + updateEditData.brandId + ' BrandCategoryName:  ' + updateEditData.brandCategoryName);
+
+            //editData = null;
+            editData.brandCategory.name = editBrandCategoryNameEle.val();
+            editData.brandCategory.brandId = editBrandNameDdlEle.val();
+            //console.log('BrandId: ' + editData.brandCategory.brandId + ' BrandCategoryName:  ' + editData.brandCategory.name);
+
+            var hasInfo = false;
+            var isSaved = false;
+            var error = null;
+            var responseMessage = null;
+            var displayMessage = null;
+            var indexStart = null;
+
+            $.ajax({
+                url: updateEditBrandCategoryUrl,
+                type: 'POST',
+                data: JSON.stringify(editData),
+                cache: false,
+                contentType: 'application/json',
+                dataType: 'json'
+                //We do not need datatype because we are not expecting any data
+            })
+                .done(function (res) {
+                    hasInfo = true;
+
+                    responseMessage = res.statusMessage;
+                    indexStart = responseMessage.indexOf(":") + 1;
+
+                    if (responseMessage.startsWith("Error")) {
+                        displayMessage = responseMessage.substring(indexStart);
+                    }
+                    if (responseMessage.startsWith("Success")) {
+                        isSaved = true;
+                        displayMessage = responseMessage.substring(indexStart);
+                    }
+                })
+                .fail(function (err) {
+                    error = err;
+                    displayMessage = "Error In Saving Data!"
+                })
+                .always(function () {
+                    //Hide Edit Modal
+                    editBrandCategoryModal.modal('hide');
+
+                    if (hasInfo) {
+                        if (isSaved) {
+                            toastr.success(displayMessage);
+                            setTimeout(function () {
+                            window.location.reload();
+                            }, 2000);
+                        } else {
+                            toastr.info(displayMessage);
+                        }
+                    }
+                    else {
+                        toastr.error(displayMessage);
+                        console.log('Error: ' + error);
+                    }
+                })
+
+        }
+
+        function detailBrandCategory(id) {
+            var isOK = false;
+            var response = null;
+
+            $.ajax({
+                url: getDetailBrandCategoryUrl,
+                type: 'GET',
+                data: { brandCategoryId: id },
+                cache: false,
+                contentType: 'application/json',
+                dataType: 'json'
+            })
+                .done(function (res) {
+                    response = res;
+                    isOK = true;
+                })
+                .fail(function (err) {
+                    error = err;
+                })
+                .always(function () {
+                    if (isOK) {
+                        //console.log(response);
+                        detailBrandCategoryModal.modal({ backdrop: 'static', keyboard: false });
+                        detailBrandNameEle.val(response.brand.name);
+                        detailBrandCategoryNameEle.val(response.name);
+                    } else {
+                        toastr.error('Error Getting Details of Category!')
+                        console.log('Error: ' + error)
+                    }
+                });
+        }
+
+        function deleteBrandCategory(id) {
+            deleteId = null;
+
+            if (id != null) {
+                deleteId = id;
+                deleteBrandCategoryModal.modal({ backdrop: 'static', keyboard: false });
+            } else {
+                toastr.error('Error: Id of Category is Null');
+            }
+        }
+
+        function deleteConfirmBrandCategory() {
+            var isOk = false;
+            var error = null;
+            //console.log('Id :' + deleteId);
+
+            $.ajax({
+                url: deleteBrandCategoryUrl,
+                type: 'GET',
+                data: { brandcategoryId: deleteId },
+                cache: false,
+                contentType: 'application/json; charset=UTF-8;',
+                dataType: 'json'
+            })
+                .done(function () {
+                    isOk = true;
+                })
+                .fail(function (err) {
+                    error = err;
+                })
+                .always(function () {
+                    if (isOk) {
+                        deleteBrandCategoryModal.modal('hide');
+                        toastr.success('Data Deleted Successfully!');
+                        //window.location.reload()
+                        setTimeout(function () {
+                         window.location.reload()
+                        }, 3000);
+                    } else {
+                        toastr.error('Error In Deleting Data');
+                        console.log('Error: ' + error);
+                    }
+                })
+        }
+
+        $(document).ready(function () {
+            $("#categoryTbl").DataTable();
+        });
+    </script>
+}

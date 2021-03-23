@@ -1,0 +1,269 @@
+﻿@model ComputerHouse.Models.ViewModels.HomeIndexViewModel
+@{
+    ViewData["Title"] = "Home Page";
+}
+
+<!--jumbotron-->
+<div class="jumbotron-fluid p-0 m-0 mb-3 position-relative">
+    @*Add position-relative so that we can make button absolute*@
+
+    @*<img src="~/img/carosuelLong.PNG" />*@
+    <img src="~/img/niceCarousek2.PNG" class="img-fluid" style="max-height:500px; width:100%;" />
+    <a class="btn btn-lg btn-primary btn-start-shopping" asp-area="Customer" asp-controller="Shoppings"
+       asp-action="Index"><i class="fab fa-youtube"></i>&nbsp;&nbsp;Start Shopping</a>
+    <div class="img-text-center">
+        <b>This is not a commercial site. It is build solely for teaching and learning purpose only. 
+        The images and data that are used does not represents the actual data.</b>
+    </div>
+</div>
+
+<!--new-products-->
+<div class="container">
+    <h2><strong>New Products</strong></h2>
+    <hr />
+
+    @if (Model.NewProductList != null && Model.NewProductList.Count() > 0)
+    {
+        @*<br />*@
+        <div class="row">
+            @foreach (var item in Model.NewProductList)
+            {
+                <div class="col-md-4 pt-0 new-product">
+                    <div class="main-card">
+                        @{
+                            var base64 = Convert.ToBase64String(item.Image);
+                            var imgSrc = string.Format("data:image/jpg;base64,{0}", base64);
+                            //This part is concating two string.
+                        }
+                        <img class="card-img-top p-2" src="@imgSrc" alt="Card image cap" style="height:250px; width:100%;" />
+                        <div class="card-body text-center">
+                            <h4 class="card-title"><strong>@item.Name</strong></h4>
+                            <p class="card-text">
+                                @{
+                                    var desc = "";
+                                    desc = string.Concat(item.Description.Substring(0, 110), "....");
+                                }
+                                @desc
+                            </p>
+                            <span class="rate-device">
+                                @for (var i = 0; i < item.Rated; i++)
+                                {
+                                    <i class="fas fa-star"></i>
+                                }
+                                @for (var i = 0; i < (5 - item.Rated); i++)
+                                {
+                                    <i class="far fa-star"></i>
+                                }
+                            </span>
+                            <br />
+                            <br />
+                            <h4>@string.Format("{0:c}", item.Price)</h4>
+                            <br />
+                            <ul>
+                                <li><a asp-controller="Shoppings" asp-action="AddToWishList" asp-route-id="@item.Id"><i class="fas fa-heart"></i></a></li>
+                                @*<li><a asp-controller="Shoppings" asp-action="Detail" asp-route-id="@item.Id"><i class="fas fa-search-plus"></i></a></li>*@
+                                <li><a onclick='quickView("@item.Id")'><i class="fas fa-search-plus"></i></a></li>
+                                <li><a asp-controller="Shoppings" asp-action="AddToCart" asp-route-id="@item.Id"><i class="fas fa-cart-plus"></i></a></li>
+                            </ul>
+                        </div>
+                        @if (item.Quantity <= 5)
+                        {
+                            <div class="badge badge-light item-stock-info">Only @item.Quantity Remaining</div>
+                        }
+                    </div>
+                </div>
+            }
+        </div>
+    }
+    else
+    {
+        <div class="row light-background-with-border">
+            <p><h6 class="text-primary">There are no item.....</h6></p>
+        </div>
+    }
+</div>
+<br />
+
+<!--Implement About Us Here-->
+<div class="container-about-us" id="about-us">
+    <br />
+    <div class="container">
+        <div class="about-us">
+            <br />
+            <h2 class="text-center">About Us</h2>
+            <hr />
+            <br />
+            <p>
+                Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.
+                Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure
+                dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non
+                proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
+            </p>
+            <p>
+                Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.
+                Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure
+                dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non
+                proident, sunt in culpa qui officia deserunt mollit anim id est laborum. Lorem ipsum dolor sit amet, consectetur adipiscing
+                elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation
+                ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum
+                dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
+            </p>
+            <p>
+                Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.
+                Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure
+                dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non
+                proident, sunt in culpa qui officia deserunt mollit anim id est laborum. Lorem ipsum dolor sit amet, consectetur adipiscing
+                elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation
+                ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum
+                dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
+            </p>
+        </div>
+    </div>
+    <br />
+</div>
+<br />
+<!--Implementation of Email Subscription-->
+<div class="container-email-subscribe">
+    <div class="container">
+        <form method="post" asp-action="EmailSubscription" asp-controller="Home">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <div class="row">
+                <div class="col-8 offset-md-2 col-md-6 text-right">
+                    <input asp-for="@Model.EmailSubscription.Email" class="form-control" type="email" placeholder="Please Enter Email" />
+                    <span asp-validation-for="@Model.EmailSubscription.Email" class="text-danger"></span>
+                </div>
+                <!--p-0 is used so that we will have pleanty room for button in extra small device-->
+                <div class="col-4 col-md-4 p-0">
+                    <button type="submit" class="btn btn-lg btn-primary">Subscribe</button>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
+<br />
+<br />
+
+<!--Implementation of Happy Customers-->
+<div class="container">
+    <h2 class="text-capitalize text-center"><strong>What our Happy Customers Say</strong></h2>
+    <hr />
+    <div class="row customer">
+        <div class="col-12 col-lg-4 text-center customer-individual">
+            <img src="~/img/customer1.jpg" class="rounded-circle" style="height:180px;width:120px;" />
+            <br />
+            <br />
+            <h4><b>Customer Name</b></h4>
+            <p class="text-center">
+                Some quick example text to build on the card title and make up the bulk
+                of the card's content.
+            </p>
+        </div>
+        <div class="col-12 col-lg-4 text-center customer-individual">
+            <img src="~/img/customer2.PNG" class="rounded-circle" style="height:180px;width:120px;" />
+            <br />
+            <br />
+            <h4><b>Customer Name</b></h4>
+            <p class="text-center">
+                Some quick example text to build on the card title and make up the bulk
+                of the card's content.
+            </p>
+        </div>
+        <div class="col-12 col-lg-4 text-center customer-individual">
+            <img src="~/img/customer3.PNG" class="rounded-circle" style="height:180px;width:120px;" />
+            <br />
+            <br />
+            <h4><b>Customer Name</b></h4>
+            <p class="text-center">
+                Some quick example text to build on the card title and make up the bulk
+                of the card's content.
+            </p>
+        </div>
+    </div>
+</div>
+
+<!--Implement Contact Us Here-->
+<!--Modal Popup For Quick View-->
+<div class="modal fade bd-example-modal-lg" role="dialog" id="quick-view-modal">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-body">
+                @*Start*@
+                <div class="light-background-with-border">
+                    <div class="row">
+                        <div class="col-12 col-md-5">
+                            @*@{
+                                    var base64 = Convert.ToBase64String(Model.Image);
+                                    var imgSrc = string.Format("data:image/jpg;base64,{0}", base64);
+                                }*@
+                            <img id="img-device" src="" class="img-fluid" />
+                        </div>
+                        <div class="col-12 col-md-7">
+                            <h3 id="modal-device-name"></h3>
+                            <hr />
+                            <h3 id="modal-device-price"></h3>
+                            <hr />
+                            <a href="#" id="features">See all features</a>
+                            <br />
+                            <hr />
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col">
+                            <p id="modal-device-description"></p>
+                            <hr />
+                            <div class="row">
+                                <div class="col-6 offset-6 text-right">
+                                    <a class="btn btn-lg btn-light form-control" data-dismiss="modal"><b>CLOSE</b></a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                @*End*@
+            </div>
+        </div>
+    </div>
+</div>
+<!--End Of Modal Popup For Quick View-->
+
+@section Scripts{
+    @{ await Html.RenderPartialAsync("_ValidationScriptsPartial.cshtml");}
+
+    <script type="text/javascript">
+
+        function quickView(deviceId) {
+
+            //Clearing previous values appended values
+            $("#modal-device-name").empty();
+            $("#modal-device-description").empty();
+
+
+            //console.log(deviceId);
+
+            $.getJSON('/api/device/' + deviceId, function (data, status) {
+                //console.log(data);
+                if (status === "success") {
+
+                    $("#quick-view-modal").modal({ backdrop: 'static', keyboard: false });
+                    $("#modal-device-name").append(data.name);
+                    $("#modal-device-description").append(data.description);
+
+                    const formatter = new Intl.NumberFormat('en-US', {
+                        style: 'currency',
+                        currency: 'AUD',
+                        minimumFractionDigits: 2
+                    });
+                    var price = formatter.format(data.price) // "$1,000.00"
+                    $("#modal-device-price").text(price);
+
+                    $("#features").attr("href", "/Customer/Shoppings/Detail/" + deviceId);
+                    $('#img-device').attr('src', 'data:image/jpg;base64,' + data.image);
+                }
+                else {
+                    toastr.error("Error: Something went wrong.");
+                    console.log("Something went wrong!");
+                }
+            });
+        }
+    </script>
+}

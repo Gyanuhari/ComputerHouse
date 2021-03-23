@@ -1,0 +1,39 @@
+﻿@model ComputerHouse.Models.Brand
+@{
+    ViewData["Title"] = "Create";
+}
+
+
+<div class="container">
+    <div class="light-background-with-border">
+        <form asp-action="Create" method="post">
+            <h4><strong>Create New Brand</strong></h4>
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <hr />
+            <br />
+            <div class="form-group row">
+                @*<div class="col-4 offset-md-1 col-md-2 text-right">
+                        <label asp-for="Name"></label>
+                    </div>*@
+                <div class="col col-md-6">
+                    <label asp-for="Name" class="custom-label"></label>
+                    <input asp-for="Name" class="form-control" />
+                    <span asp-validation-for="Name" class="text-danger"></span>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-6 col-md-3">
+                    <input type="submit" value="Submit" class="btn btn-lg btn-primary form-control" />
+                </div>
+                <div class="col-6 col-md-3">
+                    <a class="btn btn-lg btn-success form-control" asp-action="Index">To List</a>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
+
+<!--Everytime when you are submitting the form to protect from unnecessary scripts. Also, validates the form before it is submitted-->
+@section Scripts{
+    @{ await Html.RenderPartialAsync("_ValidationScriptsPartial.cshtml");}
+}

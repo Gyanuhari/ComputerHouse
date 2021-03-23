@@ -1,0 +1,67 @@
+﻿@model ComputerHouse.Models.ViewModels.WishlistPaginationVM
+@{
+    ViewData["Title"] = "Index";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<br />
+<div class="container">
+    <h4 class="text-primary">My Wishlist</h4>
+    <hr />
+    @if (Model.WishLists != null && Model.WishLists.Count() > 0)
+    {
+        <div class="row wishlist-container">
+            @foreach (var item in Model.WishLists)
+            {
+                /*Column not mention means all 12 columns*/
+                <div class="wishlist-item">
+                    <div class="row">
+                        <div class="col-5">
+                            @{
+                                var base64 = Convert.ToBase64String(item.Device.Image);
+                                var imgSrc = string.Format("data:image/jpg;base64,{0}", base64);
+                            }
+                            <img src="@imgSrc" alt="divPic" class="img-fluid" />
+                        </div>
+                        <div class="col-7">
+                            <a href="/Customer/Shoppings/Detail/@item.Device.Id"><h6><b>@item.Device.Name</b></h6></a>
+                            <hr />
+                            <h6>@string.Format("{0:c}", item.Device.Price)</h6>
+                            <hr />
+                            @*<a asp-controller="Shoppings" asp-action="Detail" asp-route-id="@item.Device.Id">See all features</a>*@
+                            @*<hr />*@
+                            <a class="btn-link btn-sm" asp-controller="Shoppings" asp-action="AddToCart" asp-route-id="@item.Device.Id">Add To Cart</a>
+                            &nbsp;&nbsp;&nbsp;&nbsp;
+                            <a class="btn-sm btn-link" asp-controller="WishLists" asp-action="Remove" asp-route-id="@item.Device.Id">Remove</a>
+                            <hr />
+                        </div>
+                    </div>
+                    <div class="row pt-1">
+                        <div class="col">
+                            <p>@string.Concat(item.Device.Description.Substring(0, 220), "....")</p>
+                        </div>
+                    </div>
+                </div>
+            }
+        </div>
+        <br />
+        <div class="row">
+            <div class="col">
+                <div page-model="@Model.PagingInfo" page-action="Index" page-classes-enabled="true" page-class="btn btn-lg border"
+                     page-class-normal="btn btn-lg btn-default" page-class-selected="btn btn-lg btn-primary active" class="pagination float-right m-1"></div>
+            </div>
+        </div>
+        <br />
+    }
+    else
+    {
+        <div class="light-background-with-border ml-0">
+            <h5 class="text-primary">No Items In Your WishList.</h5>
+            <br />
+            <a class="btn btn-primary" asp-area="Customer" asp-controller="Shoppings" asp-action="Index">
+                <i class="fab fa-youtube"></i>&nbsp;&nbsp;Start Adding
+            </a>
+        </div>
+    }
+</div>
+

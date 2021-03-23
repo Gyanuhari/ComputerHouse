@@ -1,0 +1,125 @@
+﻿@model ComputerHouse.Models.Device
+@{
+    ViewData["Title"] = "Detail";
+}
+
+
+<div class="container">
+    <div class="light-background-with-border">
+        <div class="row">
+            <div class="col">
+                <h4 class="text-primary"><strong>Details of Device</strong></h4>
+            </div>
+        </div>
+        <hr />
+            <div class="row">
+                <div class="col-12 d-md-none d-sm-block mb-2">
+                    @{
+                        var base64 = Convert.ToBase64String(Model.Image);
+                        var imgSrc = string.Format("data:image/jpg;base64,{0}", base64);
+                    }
+                    <img src="@imgSrc" style="width:100%; height:250px;" />
+                </div>
+                <div class="col-12 col-md-8">
+                    <fieldset disabled>
+                        <div class="row form-group">
+                            <div class="col">
+                                <label asp-for="Name" class="custom-label"></label>
+                                <input asp-for="Name" class="form-control" />
+                            </div>
+                        </div>
+                        <div class="row form-group">
+                            <div class="col-6">
+                                <label asp-for="BrandId" class="custom-label"></label>
+                                <input asp-for="Brand.Name" class="form-control" />
+                            </div>
+                            <div class="col-6">
+                                <label asp-for="BrandCategoryId" class="custom-label"></label>
+                                <input asp-for="BrandCategory.Name" class="form-control" />
+                            </div>
+                        </div>
+                        <div class="row form-group">
+                            <div class="col-6">
+                                <label asp-for="OSId" class="custom-label"></label>
+                                <input asp-for="OperatingSystem.Name" class="form-control" />
+                            </div>
+                            <div class="col-6">
+                                <label asp-for="HDType" class="custom-label"></label>
+                                <select asp-for="HDType" asp-items="Html.GetEnumSelectList<Device.EHDTypes>()" class="form-control"></select>
+                            </div>
+                        </div>
+                        <div class="row form-group">
+                            <div class="col-6">
+                                <label asp-for="HDCapacity" class="custom-label"></label>
+                                <select asp-for="HDCapacity" asp-items="Html.GetEnumSelectList<Device.EHDCapacity>()" class="form-control"></select>
+                            </div>
+                            <div class="col-6">
+                                <label asp-for="RAMCapacity" class="custom-label"></label>
+                                <select asp-for="RAMCapacity" asp-items="Html.GetEnumSelectList<Device.ERAMCapacity>()" class="form-control"></select>
+                            </div>
+                        </div>
+                        <div class="row form-group">
+                            <div class="col">
+                                <div class="row form-group">
+                                    <div class="col-6">
+                                        <label asp-for="Price" class="custom-label"></label>
+                                        <input asp-for="Price" class="form-control" />
+                                    </div>
+                                    <div class="col-6">
+                                        <label asp-for="ScreenSize" class="custom-label"></label>
+                                        <input asp-for="ScreenSize" class="form-control" placeholder="Eg. 15.50" />
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row form-group">
+                            <div class="col-6">
+                                <input type="checkbox" asp-for="Bluetooth" class="custom-checkbox" />
+                                <label asp-for="Bluetooth" class="custom-label"></label>
+                            </div>
+                            <div class="col-6">
+                                <input type="checkbox" asp-for="HDMI" class="custom-checkbox" />
+                                <label asp-for="HDMI" class="custom-label"></label>
+                            </div>
+
+                        </div>
+                        <div class="row form-group">
+                            <div class="col-6">
+                                <input type="checkbox" asp-for="IsTouchScreen" class="custom-checkbox" />
+                                <label asp-for="IsTouchScreen" class="custom-label"></label>
+                            </div>
+                            <div class="col-6">
+                                <input type="checkbox" asp-for="IsNew" class="custom-checkbox" />
+                                <label asp-for="IsNew" class="custom-label"></label>
+                            </div>
+                        </div>
+                        <div class="row form-group">
+                            <div class="col">
+                                <label asp-for="Image" class="custom-label"></label>
+                                <input asp-for="Image" type="file" multiple name="files" />
+                                @*<span asp-validation-for="Device.Image" class="text-danger"></span>*@
+                            </div>
+                        </div>
+                        <div class="row form-group">
+                            <div class="col-12">
+                                <label asp-for="Description" class="custom-label"></label>
+                                <textarea asp-for="Description" cols="5" rows="4" class="form-control"></textarea>
+                            </div>
+                        </div>
+                    </fieldset>
+                    <div class="row form-group">
+                        <div class="col">
+                            <a class="btn btn-lg btn-warning form-control" asp-action="Edit" asp-route-id="@Model.Id">Edit</a>
+                        </div>
+                        <div class="col">
+                            <a class="btn btn-lg btn-success form-control" asp-action="Index">To List</a>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-12 col-md-4 d-none d-md-block">
+                    @*These local variables are already defined above.*@
+                    <img src="@imgSrc" style="width:100%; height:250px;" />
+                </div>
+            </div>
+    </div>
+</div>

@@ -1,0 +1,51 @@
+﻿@model Device
+
+<div class="modal fade bd-example-modal-lg" role="dialog" id="detail-modal">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-body">
+                @*Start*@
+                <div class="light-background-with-border">
+                    <div class="row">
+                        <div class="col-12 col-md-5">
+                            @{
+                                var base64 = Convert.ToBase64String(Model.Image);
+                                var imgSrc = string.Format("data:image/jpg;base64,{0}", base64);
+                            }
+                            <img src="@imgSrc" class="img-fluid" />
+                        </div>
+                        <div class="col-12 col-md-7">
+                            <h3>@Model.Name</h3>
+                            <hr />
+                            <h3>@string.Format("{0:c}", Model.Price)</h3>
+                            <hr />
+                            <a href="#">See all features</a>
+                            <br />
+                            <hr />
+                            <p>@Model.Description</p>
+                            <hr />
+                            <div class="row">
+                                <div class="col-6">
+                                    <a asp-controller="Shoppings" asp-action="AddToCart" asp-route-id="@Model.Id" class="btn btn-lg btn-secondary form-control"><b>ADD TO CART</b></a>
+                                </div>
+                                <div class="col-6">
+                                    <a asp-area="Customer" asp-controller="Shoppings" asp-action="Index"  class="btn btn-lg btn-light form-control"><b>CLOSE</b></a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                @*End*@
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts{
+
+    <script type="text/javascript">
+        $(document).ready(function () {
+            $("#detail-modal").modal({ backdrop: 'static', keyboard: false });
+        });
+    </script>
+}

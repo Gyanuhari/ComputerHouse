@@ -1,0 +1,58 @@
+﻿@page
+@model IndexModel
+@{
+    ViewData["Title"] = "Profile";
+    ViewData["ActivePage"] = ManageNavPages.Index;
+}
+
+<h4 class="text-primary">@ViewData["Title"]</h4>
+<hr />
+<partial name="_StatusMessage" for="StatusMessage" />
+<div class="row">
+    <div class="col-md-10 col-lg-8">
+        <form id="profile-form" method="post">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <div class="form-group">
+                <label asp-for="Input.FirstName" class="custom-label"></label>
+                <input asp-for="Input.FirstName" class="form-control" />
+            </div>
+            <div class="form-group">
+                <label asp-for="Input.LastName" class="custom-label"></label>
+                <input asp-for="Input.LastName" class="form-control" />
+            </div>
+            @*<div class="form-group">
+            <label asp-for="Username" class="custom-label"></label>
+            <input asp-for="Username" class="form-control" disabled />
+            </div>
+            I do not want it to display so I made it hidden*@
+            <input asp-for="Username" class="form-control" type="hidden"/>
+
+            <div class="form-group">
+                <label asp-for="Input.Email" class="custom-label"></label>
+                @if (Model.IsEmailConfirmed)
+                {
+                    <div class="input-group">
+                        <input asp-for="Input.Email" class="form-control" />
+                        <span class="input-group-addon" aria-hidden="true"><span class="glyphicon glyphicon-ok text-success"></span></span>
+                    </div>
+                }
+                else
+                {
+                    <input asp-for="Input.Email" class="form-control" />
+                    <button id="email-verification" type="submit" asp-page-handler="SendVerificationEmail" class="btn btn-link">Send verification email</button>
+                }
+                <span asp-validation-for="Input.Email" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Input.PhoneNumber" class="custom-label"></label>
+                <input asp-for="Input.PhoneNumber" class="form-control" />
+                <span asp-validation-for="Input.PhoneNumber" class="text-danger"></span>
+            </div>
+            <button id="update-profile-button" type="submit" class="btn btn-lg btn-primary col-6">Save</button>
+        </form>
+    </div>
+</div>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}

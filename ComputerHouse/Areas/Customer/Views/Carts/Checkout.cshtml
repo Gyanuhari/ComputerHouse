@@ -1,0 +1,144 @@
+﻿@model ComputerHouse.Models.ViewModels.CartItemAndOrderVM
+@{
+    ViewData["Title"] = "Checkout";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div class="container">
+    <div class="light-background-with-border">
+        @if (Model != null && Model.CartItemList.Count() > 0)
+        {
+            <form asp-action="Checkout" method="post">
+                <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+                <div class="row">
+                    <div class="col-12 col-md-6 col-lg-5 mb-2">
+                        <div class="row">
+                            <div class="col-12">
+                                <h5>Pick-Up Details</h5>
+                            </div>
+                        </div>
+                        <div class="row form-group">
+                            <div class="col-12">
+                                <input asp-for="OrderHeader.Name" class="form-control" placeholder="Full Name Here..." />
+                                <span asp-validation-for="OrderHeader.Name" class="text-danger"></span>
+                            </div>
+                        </div>
+                        <div class="row form-group">
+                            <div class="col-12">
+                                <input asp-for="OrderHeader.Phone" class="form-control" placeholder="Phone Here...Eg. 0450956465" />
+                                <span asp-validation-for="OrderHeader.Phone" class="text-danger"></span>
+                            </div>
+                        </div>
+                        <div class="row form-group">
+                            <div class="col-12">
+                                <input asp-for="OrderHeader.Email" type="email" class="form-control" placeholder="Email Here..." />
+                                <span asp-validation-for="OrderHeader.Email" class="text-danger"></span>
+                            </div>
+                        </div>
+                        <div class="row form-group">
+                            <div class="col-12">
+                                <input asp-for="OrderHeader.StreetAddress" class="form-control" placeholder="Street Address Here..." />
+                                <span asp-validation-for="OrderHeader.StreetAddress" class="text-danger"></span>
+                            </div>
+                        </div>
+                        <div class="row form-group">
+                            <div class="col-12">
+                                <input asp-for="OrderHeader.City" class="form-control" placeholder="City Here..." />
+                                <span asp-validation-for="OrderHeader.City" class="text-danger"></span>
+                            </div>
+                        </div>
+                        <div class="row form-group">
+                            <div class="col-12">
+                                <input asp-for="OrderHeader.State" class="form-control" placeholder="State Here..." />
+                                <span asp-validation-for="OrderHeader.State" class="text-danger"></span>
+                            </div>
+                        </div>
+                        <div class="row form-group">
+                            <div class="col-12">
+                                <input asp-for="OrderHeader.PostalCode" class="form-control" placeholder="Postal Code Here..." />
+                                <span asp-validation-for="OrderHeader.PostalCode" class="text-danger"></span>
+                            </div>
+                        </div>
+                        <div class="row form-group">
+                            <div class="col-12">
+                                <textarea asp-for="OrderHeader.Comments" rows="3" class="form-control" placeholder="Any Comments..."></textarea>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-12 col-md-6 offset-lg-1 col-lg-6">
+                        <div class="row">
+                            <div class="col-12">
+                                <h5>Your Order Details</h5>
+                            </div>
+                        </div>
+                        <hr />
+                        @{double total = 0.00; }
+                        @foreach (var item in Model.CartItemList)
+                        {
+                            total += @item.Device.Price * @item.ItemCount;
+                            <div class="row form-group">
+                                <div class="col-12 d-flex justify-content-between pl-3">
+                                    <span>@item.Device.Name <b>X</b> @item.ItemCount</span>
+                                    <span>@string.Format("{0:c}", @item.Device.Price * @item.ItemCount)</span>
+                                </div>
+                            </div>
+                            <hr />
+                        }
+                        <input asp-for="OrderHeader.OrderTotal" value="@total" type="hidden" />
+                        <div class="row">
+                            <div class="col-12 d-flex  justify-content-between text-primary">
+                                <span><b>Total(AUD):</b></span>
+                                <span><b> @string.Format("{0:c}", total)</b></span>
+                            </div>
+                        </div>
+                        <br />
+                        <br />
+                        <div class="row">
+                            <div class="col-12 d-flex justify-content-between">
+                                <h5>Payment Details</h5><span class="text-info" style="font-size:12px;">(Cheers! Free Today)</span>
+                            </div>
+                        </div>
+                        <fieldset disabled>
+                            <div class="row form-group">
+                                <div class="col-12">
+                                    <input class="form-control" placeholder="Name On Card" />
+                                </div>
+                            </div>
+                            <div class="row form-group">
+                                <div class="col-12">
+                                    <input class="form-control" placeholder="Card Number.." />
+                                </div>
+                            </div>
+                            <div class="row form-group">
+                                <div class="col-7">
+                                    <input class="form-control" placeholder="Valid Till(MM/YY)" />
+                                </div>
+                                <div class="col-5">
+                                    <input class="form-control" placeholder="CCV" />
+                                </div>
+                            </div>
+                        </fieldset>
+                        <div class="row form-group text-right">
+                            <div class="col-12">
+                                <button type="submit" class="btn btn-primary">PLACE ORDER</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </form>
+
+        }
+        else
+        {
+            <div class="light-background-with-border">
+                <p>No any items added to the shopping cart....</p>
+                <a class="btn btn-lg btn-primary" asp-area="Customer" asp-controller="Shoppings"
+                   asp-action="Index"><i class="fab fa-youtube"></i>&nbsp;&nbsp;Start Shopping</a>
+            </div>
+        }
+    </div>
+</div>
+
+@section Scripts{
+    @{ await Html.RenderPartialAsync("_ValidationScriptsPartial.cshtml");}
+}

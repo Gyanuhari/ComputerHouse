@@ -1,0 +1,150 @@
+﻿@model ComputerHouse.Models.ViewModels.BrandAndCategoryVM
+@using ComputerHouse.Extensions
+@{
+    ViewData["Title"] = "Create";
+}
+
+
+
+
+<div class="container">
+    <div class="row">
+        <div class="col-12">
+            <p>
+                @await Html.PartialAsync("_StatusMessage", Model.StatusMessage)
+            </p>
+        </div>
+    </div>
+    <div class="light-background-with-border">
+        <div class="row">
+            <div class="col">
+                <h4 class="text-primary"><strong>Create New Brand's Category</strong></h4>
+            </div>
+        </div>
+        <hr />
+        <br />
+        <div class="row">
+            <div class="col-md-6">
+                <form asp-action="Create" method="post">
+                    <div asp-validation-summary="ModelOnly"></div>
+                    <div class="row form-group">
+                        <div class="col">
+                            <label asp-for="BrandCategory.BrandId" class="custom-label"></label>
+                            <select asp-for="BrandCategory.BrandId" asp-items="Model.BrandList.ToSelectListItem<Brand>(Model.BrandCategory.BrandId)"
+                                    class="form-control" id="brandId"><option value=" ">--Please Select Brand --</option></select>
+                            <!--These both select works the above calls extension method while the below makes select list without calling extension method-->
+                            @*<select asp-for="BrandCategory.BrandId" asp-items="Model.BrandList.Select(m=>new SelectListItem { Text=m.Name, Value=m.Id.ToString()})"
+                                    class="form-control" id="brandId">
+                                <option value=" ">--Please Select Brand --</option>
+                            </select>*@
+                            <span asp-validation-for="BrandCategory.BrandId" class="text-danger"></span>
+                        </div>
+                    </div>
+                    <div class="row form-group row-mobile">
+                        <div class="col d-block d-md-none">
+                            <div class="list-group brand-category-list">
+                        @*<div class="list-group-item list-group-item-action">
+                                <h5><strong>Existing BrandCategories</strong></h5>
+                            </div>
+                            <a href="#" class="list-group-item list-group-item-action">
+                                Dapibus ac facilisis in
+                            </a>
+                            <a href="#" class="list-group-item list-group-item-action disabled">
+                                Morbi leo risus
+                            </a>*@
+                        </div>
+                            </div>
+                    </div>
+                    <div class="row form-group">
+                        <div class="col">
+                            <label asp-for="BrandCategory.Name" class="custom-label"></label>
+                            <input asp-for="BrandCategory.Name" class="form-control" />
+                            <span asp-validation-for="BrandCategory.Name" class="text-danger"></span>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-6">
+                            <input type="submit" value="Submit" class="btn btn-lg btn-primary form-control" />
+                        </div>
+                        <div class="col-6">
+                            <a class="btn btn-lg btn-success form-control" asp-action="Index">To List</a>
+                        </div>
+                    </div>
+                </form>
+            </div>
+            <div class="col-md-6 offset-xl-1 col-xl-5 d-none d-md-block">
+                <div class="row form-group row-lg-screen">
+                    <div class="col ">
+                        <div class="list-group brand-category-list">
+                            <!--First Show Student By putting this and later remove it.-->
+                            @*<a href="#" class="list-group-item list-group-item-action">
+                                <h5><strong>Existing BrandCategories</strong></h5>
+                            </a>
+                            <a href="#" class="list-group-item list-group-item-action">
+                                Dapibus ac facilisis in
+                            </a>
+                            <a href="#" class="list-group-item list-group-item-action disabled">
+                                Morbi leo risus
+                            </a>*@
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts{
+
+    <script type="text/javascript">
+        $(document).ready(function () {
+
+            getBrandCategory();
+
+            $("#brandId").change(function () {
+                getBrandCategory();
+            });
+        });
+
+        //$(window).resize(function () {
+        //    var viewportWidth = $(this.window).width();
+        //    if (viewportWidth < 576) {
+        //        $(".row-lg-screen").removeClass("row form-group");
+        //    }
+        //});
+
+        function getBrandCategory() {
+            var url = '/admin/BrandCategories/GetBrandCategoriesByBrand';
+            //var url='/api/brands'--using Route[()] attribute
+            var thisbrandId = $("#brandId").val();
+
+            console.log('thisbrandId:' + thisbrandId);
+
+            $.getJSON(url, { brandId: thisbrandId }, function (data) {
+                var items = '';
+                $(".brand-category-list").empty();
+
+                console.log('Data:' + data);
+
+                if (data != null && data != '') {
+                    items += "<div class='list-group-item list-group-item-action'><h5><strong>Existing BrandCategories</strong></h5></div>";
+
+                    $.each(data, function (i, brandCategory) {
+                        items += "<div class='list-group-item list-group-item-action'><h6><strong>" + brandCategory + "</strong></h6></div>";
+                    });
+
+                    $(".brand-category-list").html(items);
+                }
+                else {
+
+                    items += "<div class='list-group-item list-group-item-action'><h5><strong>Existing BrandCategories</strong></h5></div>";
+                    items += "<div class='list-group-item list-group-item-action'><h6><strong>No Any Brand's Categories</strong></h6></div>";
+
+                    $(".brand-category-list").html(items);
+                }
+            });
+        }
+    </script>
+
+    @{ await Html.RenderPartialAsync("_ValidationScriptsPartial.cshtml");}
+}

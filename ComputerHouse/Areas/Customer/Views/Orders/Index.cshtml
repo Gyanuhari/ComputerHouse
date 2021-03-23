@@ -1,0 +1,151 @@
+﻿@model ComputerHouse.Models.ViewModels.RecentOrderViewModel
+@using ComputerHouse.Utility
+@{
+    ViewData["Title"] = "Index";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div class="track-recent-order pt-md-5">
+    <div class="container">
+        <h4 class="text-center">Track Your Recent Order</h4>
+        <br />
+        <form method="post" asp-action="SearchOrder">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <div class="row">
+                <div class="col-md-10 offset-md-1 text-center"> @*text-center is for dispalying validation msg at center*@
+                    <div class="search-container">
+                        <input asp-for="OrderNo" placeholder="Your Order Number....." value=""/> @*Initial Value 0 is cleared due to value=""*@
+                        <button type="submit" class="btn btn-lg btn-primary">Track Order</button>
+                    </div>
+                    <span asp-validation-for="OrderNo" class="text-danger"></span>
+                </div>
+            </div>
+        </form>
+        <br />
+    </div>
+</div>
+<br />
+<br />
+
+<!--Tracking Start-->
+<div class="container px-1 px-md-4 my-md-5 mx-auto">
+    @{
+        var status1 = "";
+        var status2 = "";
+        var status3 = "";
+        var status4 = "";
+
+        if (!String.IsNullOrEmpty(Model.OrderStatus) && Model.OrderNo != 0)
+        {
+            <div class="row d-flex justify-content-between px-3">
+                <div class="d-flex">
+                    <h5>Order No:<span class="text-primary font-weight-bold">@Model.OrderNo</span></h5>
+                </div>
+                <div class="d-flex flex-column text-sm-right">
+                    <p class="mb-0">Expected Arrival: <span class="text-primary font-weight-bold">
+                    @(Model.OrderStatus==SD.StatusDelivered? "Delivered": Model.ExpectedArrival.ToShortDateString())</span></p>
+                    @*<p>USPS <span class="font-weight-bold">234094567242423422898</span></p>*@
+                </div>
+            </div>
+            switch (Model.OrderStatus)
+            {
+                case SD.StatusPlaced:
+                    status1 = "active";
+                    break;
+                case SD.StatusShipped:
+                    status1 = "active";
+                    status2 = "active";
+                    break;
+                case SD.StatusOnWay:
+                    status1 = "active";
+                    status2 = "active";
+                    status3 = "active";
+                    break;
+                case SD.StatusDelivered:
+                    status1 = "active";
+                    status2 = "active";
+                    status3 = "active";
+                    status4 = "active";
+                    break;
+                default:
+                    break;
+
+            }
+        }
+        else
+        {
+            <div class="row d-flex justify-content-between px-3">
+                <div class="d-flex">
+                    <h5>Order No:<span class="text-primary font-weight-bold">0000</span></h5>
+                </div>
+                <div class="d-flex flex-column text-sm-right">
+                    <p class="mb-0">Expected Arrival: <span class="text-primary font-weight-bold">00/00/0000</span></p>
+                    @*<p>USPS <span class="font-weight-bold">234094567242423422898</span></p>*@
+                </div>
+            </div>
+        }
+    }
+    <div class="row d-flex justify-content-center">
+        <div class="col-12">
+            <ul id="progressbar" class="text-center">
+                <li class="step1 @status1">Order Placed</li>
+                <li class="step2 @status2">Order Shipped</li>
+                <li class="step3 @status3"><span id="three">Order On Way</span></li>
+                <li class="step4 @status4">Order Delivered</li>
+            </ul>
+        </div>
+    </div>
+    @*<div class="row justify-content-between top">
+            <div class="row d-flex icon-content">
+                <img class="icon" src="https://i.imgur.com/9nnc9Et.png">
+                <div class="d-flex flex-column">
+                    <p class="font-weight-bold">Order<br>Placed</p>
+                </div>
+            </div>
+            <div class="row d-flex icon-content">
+                <img class="icon" src="https://i.imgur.com/u1AzR7w.png">
+                <div class="d-flex flex-column">
+                    <p class="font-weight-bold">Order<br>Shipped</p>
+                </div>
+            </div>
+            <div class="row d-flex icon-content">
+                <img class="icon" src="https://i.imgur.com/TkPm63y.png">
+                <div class="d-flex flex-column">
+                    <p class="font-weight-bold">Order<br>On Way</p>
+                </div>
+            </div>
+            <div class="row d-flex icon-content">
+                <img class="icon" src="https://i.imgur.com/HdsziHP.png">
+                <div class="d-flex flex-column">
+                    <p class="font-weight-bold">Order<br>Delivered</p>
+                </div>
+            </div>
+        </div>*@
+    <div class="row">
+            <div class="col-10 offset-md-1 text-center">
+                <p class="text-primary font-weight-bold">@Model.StatusMessage</p>
+            </div>
+    </div>
+</div>
+@*<br />
+    <div class="progress">
+        <div class="progress-bar" role="progressbar" style="width: 25%" aria-valuenow="25" aria-valuemin="0" aria-valuemax="100">Order Placed</div>
+    </div>
+    <br />
+    <div class="progress">
+        <div class="progress-bar" role="progressbar" style="width: 50%" aria-valuenow="50" aria-valuemin="0" aria-valuemax="100">Order Shipped</div>
+    </div>
+    <br />
+    <div class="progress">
+        <div class="progress-bar" role="progressbar" style="width: 75%" aria-valuenow="75" aria-valuemin="0" aria-valuemax="100">On The Way</div>
+    </div>
+    <br />
+    <div class="progress">
+        <div class="progress-bar text-right" role="progressbar" style="width: 100%" aria-valuenow="100" aria-valuemin="0" aria-valuemax="100">Ordered Delivered</div>
+    </div>*@
+
+
+<!--Everytime when you are submitting the form to protect from unnecessary scripts. Also, validates the form before it is submitted-->
+@section Scripts{
+    @{ await Html.RenderPartialAsync("_ValidationScriptsPartial.cshtml");}
+}

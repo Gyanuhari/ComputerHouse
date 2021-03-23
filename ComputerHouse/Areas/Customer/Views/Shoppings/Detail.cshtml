@@ -1,0 +1,62 @@
+﻿@model ComputerHouse.Models.Device
+@{
+    ViewData["Title"] = "Detail";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div class="container">
+    <div class="light-background-with-border">
+        <div class="row">
+            <div class="col-12 col-md-5">
+                @{
+                    var base64 = Convert.ToBase64String(Model.Image);
+                    var imgSrc = string.Format("data:image/jpg;base64,{0}", base64);
+                }
+                @*I kept style=100% becuase in small device there was small gap on right side so to maintain that*@
+                <img src="@imgSrc" class="img-fluid" style="width:100%" />
+            </div>
+            <div class="col-12 col-md-7">
+                <h3 class="text-primary">@Model.Name</h3>
+                <hr />
+                <h5>@string.Format("{0:c}", Model.Price)</h5>
+                <hr />
+                <h5 class="d-inline"><b>Operating System:</b></h5> @Model.OperatingSystem.Name
+                <hr />
+                @{var hdCapacity = (Device.EHDCapacity)Model.HDCapacity;}
+                @{var hdType = (Device.EHDTypes)Model.HDType;}
+                <h5 class="d-inline"><b>Hard Disk:</b></h5> @Html.DisplayFor(model=>hdCapacity), @Html.DisplayFor(model=>hdType)
+                <hr />
+                @{var ramCapacity = (Device.ERAMCapacity)Model.RAMCapacity;}
+                <h5 class="d-inline"><b>RAM:</b></h5> @Html.DisplayFor(model=>ramCapacity)
+                <hr />
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-12 mt-lg-2">
+                <h5>Descriptions</h5>
+                <p>@Model.Description</p>
+            </div>
+        </div>
+        <hr />
+        <div class="row d-flex justify-content-between">
+            <div class="flex-grow-1 m-2 mx-lg-4">
+                <a asp-controller="Shoppings" asp-action="AddToCart" asp-route-id="@Model.Id"
+                   class="btn btn-lg btn-secondary form-control"><b>Add To Cart</b></a>
+            </div>
+
+            @if(User.Identity.IsAuthenticated)
+            {
+
+            }
+            <div class="flex-grow-1 m-2 mx-lg-4">
+                <a asp-area="Customer" asp-controller="Shoppings" asp-action="AddToWishList"
+                   asp-route-id="@Model.Id" class="btn btn-lg btn-secondary form-control"><b>Add To Wishlist</b></a>
+            </div>
+            <div class="flex-grow-1 m-2 mx-lg-4">
+                <a asp-area="Customer" asp-controller="Shoppings" asp-action="Index"
+                   class="btn btn-lg btn-secondary form-control"><b>Continue Shopping</b></a>
+            </div>
+        </div>
+    </div>
+</div>
+

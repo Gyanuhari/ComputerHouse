@@ -1,0 +1,37 @@
+﻿@model int
+@{
+    ViewData["Title"] = "PlaceOrder";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div class="container">
+    <div class="light-background-with-border">
+        <div class="row">
+            <div class="col text-center">
+                <h1 class="text-info"><b>Thank You!</b></h1>
+                <hr />
+            </div>
+        </div>
+        <div class="row">
+            <div class="col text-black-50 text-center">
+                <h2>For Shopping With Us</h2>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col text-black-50 text-center">
+                <h4>Your Order Number</h4>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col text-black-50 text-center">
+                <h2>Is</h2>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col text-black-50 text-center">
+                <h2>@Model</h2>
+            </div>
+        </div>
+    </div>
+</div>
+

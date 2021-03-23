@@ -1,0 +1,106 @@
+﻿@model ComputerHouse.Models.ViewModels.OrderHistoryViewModel
+@{
+    ViewData["Title"] = "MyOrderHistory";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div class="container-orderHistory">
+    <div class="container">
+        <br />
+        <h4 class="text-primary">My Order History</h4>
+        <hr />
+        @if (Model != null && Model.OrderHeaderList.Count > 0)
+        {
+            foreach (var order in Model.OrderHeaderList)
+            {
+                <div class="row bg-white-orderHistory">
+                    <div class="col">
+                        <div class="row">
+                            <div class="col-12 my-2">
+                                <h4><span class="badge badge-primary font-weight-bold">Order Number: @order.Id</span></h4>
+                            </div>
+                        </div>
+                        @*<div class="row d-flex justify-content-between">*@
+                        <div class="row">
+                            <div class="col-6">
+                                <h5><span class="text-primary">Status:</span>@order.Status</h5>
+                            </div>
+                            <div class="col-6 text-right">
+                                <h5><span class="text-primary">Order Date:</span>@order.OrderDate.ToShortDateString()</h5>
+                            </div>
+                        </div>
+                        <hr />
+                        <div class="row">
+                            <div class="col-6">
+                                <div class="row d-flex justify-content-between px-3">
+                                    <span class="text-primary">Items Ordered</span>
+                                    <span class="text-primary">Qty</span>
+                                </div>
+                                <hr />
+                                @{ double total = 0.00;}
+                                @foreach (var orderItem in Model.OrderDetailList.Where(od=>od.OrderHeaderId==order.Id))
+                                {
+                                    <div class="row">
+                                        <div class="col d-flex justify-content-between">
+                                            <span>@orderItem.Device.Name</span>
+                                            <span>@orderItem.ItemCount</span>
+                                        </div>
+                                    </div>
+                                    <hr />
+                                    total = total + orderItem.SubTotal;
+                                }
+                                <div class="row">
+                                    <div class="col d-flex justify-content-between">
+                                        <span class="text-primary">Total:</span>
+                                        <span>@string.Format("{0:c}", total)</span>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-6">
+                                <div class="row px-3">
+                                    <span class="text-primary">Shipping Details</span>
+                                </div>
+                                <hr />
+                                <div class="row">
+                                    <div class="col">
+                                        <span>Order By:</span> @order.ApplicationUser.FirstName @order.ApplicationUser.LastName
+                                    </div>
+                                </div>
+                                <hr />
+                                <div class="row">
+                                    <div class="col">
+                                        <span>Pickup By:</span> @order.Name
+                                    </div>
+                                </div>
+                                <hr />
+                                <div class="row">
+                                    <div class="col">
+                                        <span>Phone:</span> @order.Phone
+                                    </div>
+                                </div>
+                                <hr />
+                                <div class="row">
+                                    <div class="col">
+                                        <span>Address:</span> @order.StreetAddress @order.City @order.State @order.PostalCode
+                                    </div>
+                                </div>
+                                <hr />
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <br />
+                @*<br />*@
+            }
+        }
+        else
+        {
+            <div class="row bg-white-orderHistory">
+                <div class="col text-primary">
+                    <p class="text-primary font-weight-bold">You have not ordered any items yet!</p>
+                </div>
+            </div>
+        }
+    </div>
+</div>
+

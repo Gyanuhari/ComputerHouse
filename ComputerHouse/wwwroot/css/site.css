@@ -1,10 +1,13 @@
 ﻿/* Please see documentation at https://docs.microsoft.com/aspnet/core/client-side/bundling-and-minification
 for details on configuring this project to bundle and minify static web assets. */
 
+/*I imported it*/
+/*@import url('https://fonts.googleapis.com/css2?family=Open+Sans:ital,wght@0,600;1,400&display=swap');*/
+
 a.navbar-brand {
-  white-space: normal;
-  text-align: center;
-  word-break: break-all;
+    white-space: normal;
+    text-align: center;
+    word-break: break-all;
 }
 
 /* Sticky footer styles
@@ -38,12 +41,18 @@ button.accept-policy {
 -------------------------------------------------- */
 html {
   position: relative;
-  min-height: 100%;
+  height: 100%;
+  /*It was already there but we need to set it to 100% to work with footer.*/
 }
 
 body {
-  /* Margin bottom by footer height */
-  margin-bottom: 60px;
+    /* Margin bottom by footer height */
+    /*margin-bottom: 60px;*/
+    /*I inserted font family to sans-serif*/
+    font-family: sans-serif, Helvetica;
+    /*I inserted font family to sans-serif*/
+    height: 100%;
+    font-size:16px;
 }
 .footer {
   position: absolute;
@@ -54,3 +63,984 @@ body {
   height: 60px;
   line-height: 60px; /* Vertically center the text there */
 }
+
+/*I want to clear increment and decrement arrow from input text-box for number especially in search recent order */
+input::-webkit-outer-spin-button,
+input::-webkit-inner-spin-button {
+    -webkit-appearance: none;
+}
+/* Firefox */
+input[type=number] {
+    -moz-appearance: textfield;
+}
+
+/*----------Bootstrap Override-----------*/
+/*Layout Override*/
+.header-top {
+    /*background-color: #2a5775;*/
+    background-image: linear-gradient(to right, #4888b6,#2a5775);
+    height: 50px;
+    width: 100%;
+}
+
+.div-social-icons{
+    margin:0px;
+    padding-left:6px;
+}
+
+.div-login-cart {
+    margin:0px;
+    padding-right:6px;
+}
+/*To remove extra space on left of social icons, however I want to remove left space from 
+ both list so that there will be pleanty of rooms for other navigator specially in smaller devices
+.header-top ul.social-icons{
+    padding-left:0px;
+}*/
+.header-top ul {
+    padding: 0px;
+    margin: 0px;
+}
+
+    .header-top ul li {
+        padding: 0px 5px;
+        display: inline;
+        list-style-type: none;
+    }
+
+    .header-top ul li a{
+        text-decoration:none;
+        color:#fff;
+        font-size:19px;
+    }
+
+    .header-top ul.login-cart > li a {
+        font-size: 14px;
+    }
+
+    .header-top ul li:hover a {
+        color: #ff6a00;
+    }
+
+    .header-top li.sign-in{
+        margin-left:10px;
+    }
+
+  
+.cart-count {
+    position: absolute;
+    left: 45px;
+    top: -10px;
+    animation: flash;
+    animation-duration: 2s;
+    animation-iteration-count: infinite;
+}
+
+/*For Smaller Devices When Cart Text Is Removed*/
+@media (max-width:767.98px) {
+    .cart-count {
+        left: 16px;
+        top: -6px;
+    }
+}
+
+
+
+.navbar-nav .nav-item {
+    padding: 10px 5px;
+    font-size: 19px;
+    font-family: sans-serif;
+}
+
+/*Want to remove the vertical spacing between nav items
+because it is looking awkward, also reduce the font-size
+@media (max-width:767.98px) {
+    .navbar-nav .nav-item {
+        padding: 0px 0px;
+        font-size:17px
+    }
+
+    As the height of header-main decreases due to padding reduction and size decreasing, we need to write this for smaller devices
+     In order to be effective this should come after the other css so, I have used it below
+    .header-main .dropdown-menu{
+        top:45px;
+    }
+}*/
+
+
+.navbar-light .navbar-nav .nav-link {
+    /*color:#444;*/
+    color: rgba(0, 0, 0, 0.7);
+    border-bottom: 3px solid #fff;
+}
+
+    .navbar-light .navbar-nav .nav-link:hover,
+    .navbar-light .navbar-nav .nav-link:focus,
+    .navbar-light .navbar-nav .nav-link:active {
+        color: #ff6a00;
+        border-bottom: 3px solid #ff6a00;
+        transition-duration: 0.1s;
+        /*animation: ease-out*/
+        animation:zoomIn;
+    }
+
+.header-main { 
+    border-bottom: 15px solid #4888b6;
+}
+
+    .header-main .dropdown-menu {
+        top: 52px;
+        padding: 15px 0px 0px 0px;
+        border-top: 3px solid #ff6a00;
+    }
+
+
+
+
+/*Want to remove the vertical spacing between nav items
+because it is looking awkward, also reduce the font-size*/
+@media (max-width:767.98px) {
+    .navbar-nav .nav-item {
+        padding: 0px;
+        font-size:17px
+    }
+
+    /*Due to the code just above media queries I have to write it here so that it become effecive*/
+    .header-main .dropdown-menu {
+        top: 38px;
+    }
+}
+
+/*To align all the navitems and underscore hover properly try this when needed*/
+@media (min-width: 576px) and (max-width:991.98px){
+    .header-main .container, .header-main .container-sm, .header-main .container-md {
+        max-width: 100%;
+    }
+}
+
+/*There was no room so to maintain that*/
+@media (min-width:576px) and (max-width:614px){
+    .navbar-nav .nav-item {
+        font-size: 15px
+    }
+
+    .header-main .dropdown-menu {
+        top: 34px;
+    }
+}
+
+/*@media (min-width:320px) and (max-width:576px) {
+
+.header-main ul li:nth-child(2){
+    border-bottom:none;
+ }
+}*/
+
+.header-main .dropdown-item{
+    padding:8px 12px;
+    font-size:16px;
+    font-weight:400;
+    width:200px;
+}
+/*There was no room so to maintain that*/
+@media (min-width:576px) and (max-width:614px) {
+    .header-main .dropdown-item {
+        font-size: 15px;
+    }
+}
+
+    .header-main .dropdown-item:hover {
+        color: #ff6a00;
+        padding-left: 16px;
+        transition: 0.2s;
+        transition-delay: 0.0008s;
+        background-color: #dce0e4;
+        width: 100%;
+/*width 100% is taken so that when we hover smaller devices greater than 200px it covers all area, check by inspecting to smaller device.*/
+    }
+
+    .dropdown-divider {
+        margin: 0px;
+    }
+
+    .header-main ul.navbar-nav >li.nav-item.dropdown:hover > div.dropdown-menu{
+        display:block;
+        /*animation:slideInDown;
+        transition-duration:2s;*/
+    }
+
+    .body-container {
+        /*min-height:calc(100%-headerheight);*/
+        /*This is added using javaScript*/
+        /*Due to padding 250px (container) will be overlapped and only data of footer will be seen, extra 10px is for spacing between body and footer.*/
+        padding-bottom: 260px;
+        /*overflow lets the body-container to increase its content*/
+        overflow: auto;
+        margin-right: 0;
+        margin-left: 0;
+    }
+
+.footer-main {
+    padding: 30px 10px;
+    /*margin-top: 10px;*/
+    width: 100%;
+    background-color: #486A7E;
+    /*background-color: #313d44;*/
+    /*background-color: #505763;*/
+    position: relative;
+    /*height:250px;*/
+    height: auto;
+    /*Due to negative main-body comes inside the footer by -250px so that our footer appears to users*/
+    margin-top: -250px;
+    clear: both;
+    /*border-top-left-radius:20%;*/
+}
+
+        .footer-main ul > li {
+            list-style-type: none;
+        }
+
+            .footer-main, .footer-main ul > li a, .footer-main a {
+                color: #eee;
+            }
+
+                /*This padding is to make heading and ul>li align in center, show students this. Also, this should go up because this is parent of above two css*/
+                .footer-main ul {
+                    padding: 0px;
+                }
+
+    .btn-back-to-top {
+        position: fixed;
+        bottom: 250px;
+        right: 15px;
+        background: #008cba;
+        color: #fff;
+        font-size: 17px;
+        border: 2px solid #4888b6;
+        border-radius: 0px;
+        /*border-radius: 50%;  if you want circle*/
+        /*line-height: 1.5; No need confusing for learners*/
+        padding: 0.5rem 1rem;
+        /*z-index:10; so that it is not overlapped by shopping card*/
+        z-index: 10;
+    }
+
+        .btn-back-to-top:hover {
+            color: #fff;
+            background: #006687
+        }
+
+.navbar-toggler:hover, .navbar-toggler:focus {
+    text-decoration: none;
+    outline: 2px solid #9a9a9a;
+}
+
+
+/*Navigation when less than 576px*/
+@media (max-width:575.98px) {
+    .navbar-nav .nav-link {
+        padding: 4px 0px;
+        border:none;
+    }
+
+    .navbar-light .navbar-nav .nav-link:hover,
+    .navbar-light .navbar-nav .nav-link:focus,
+    .navbar-light .navbar-nav .nav-link:active {
+        border: none;
+        transition: 0.2s;
+        transition-delay: 0.001s;
+        background-color: #dce0e4;
+    }
+}
+
+
+    /*Bootstrap Pagelevel Override*/
+
+    .img-text-center {
+        position: absolute;
+        font-size: 24px;
+        font-weight: 600;
+        color: #fff;
+        top: 30%;
+        left: 20%;
+        right:8%;
+        animation: fadeInRight;
+        animation-duration: 2s;
+    }
+
+    /*For devices larger than tablets*/
+    .btn-start-shopping {
+        position: absolute;
+        top: 65%;
+        left: 20%;
+    }
+
+    /*Start from 10% on left for tablets and smaller devices*/
+    @media (max-width:991.98px) {
+        .img-text-center {
+            font-size: 17px;
+            /*transform: translate(-10%,0%); This means decrease 10% on left from its original position. This or below left:10% is same*/
+            left: 10%;
+        }
+
+        .btn-start-shopping {
+            position: absolute;
+            top: 65%;
+            left: 10%;
+        }
+    }
+
+
+    @media (max-width:767.98px) {
+        .btn-start-shopping {
+            display: none;
+        }
+    }
+
+    .new-product {
+        padding: 15px 4px;
+    }
+
+    .main-card {
+        margin: 0px;
+        padding: 8px;
+        background-color: #f6f6f6;
+        border-radius: 0px;
+        width: 100%;
+        border: none;
+        /*this positin is for notification ribbon for*/
+        position: relative;
+    }
+
+    .item-stock-info {
+        position: absolute;
+        left: -10px;
+        top: 42px;
+        font-size: 14px;
+        color: #fff;
+        background-color: #4888b6;
+        -ms-transform: rotate(-40deg); /* IE 9 */
+        transform: rotate(-40deg); /* Standard syntax */
+    }
+
+    /*To learn box shadow: https://www.w3schools.com/cssref/playit.asp?filename=playcss_box-shadow*/
+    .new-product:hover .main-card {
+        background-color: #eee;
+        -webkit-box-shadow: 0 0 0 1rem #eee;
+        box-shadow: 0 0 0 1rem #eee;
+        transition: 0.5s;
+        z-index: 10;
+    }
+
+    /*Show Student without media queries and after using query*/
+    @media (min-width:1075px) {
+        .new-product:hover {
+            -ms-transform: scale(1.5); /* IE 9 */
+            -webkit-transform: scale(1.5); /* Safari 3-8 */
+            transform: scale(1.2);
+            transition: 0.5s;
+            z-index: 10;
+        }
+    }
+
+    .new-product .main-card .card-body ul > li {
+        list-style: none;
+        display: inline;
+        padding: 12px;
+        margin: 0px 5px;
+        font-size: 30px;
+        border: 2px solid #eee;
+        border-radius: 100%;
+    }
+
+        .new-product .main-card .card-body ul > li a {
+            /*color: #2a424c;*/
+            color: #777;
+        }
+
+    .new-product .main-card .card-body ul {
+        padding: 0px;
+        margin: 0px;
+    }
+
+        .new-product .main-card .card-body ul > li:hover a {
+            /*color:#5c3030;*/
+            /*color: #ce2323;*/
+            color: #ff6a00;
+        }
+
+    @media (min-width:767px) and (max-width:991px) {
+        .new-product .main-card .card-body ul > li {
+            padding: 10px;
+            margin: 0px 2px;
+            font-size: 20px;
+        }
+    }
+
+    .container-about-us, .container-email-subscribe, .container-contact {
+        width: 100%;
+        margin: 40px auto;
+        padding: 50px 0px;
+        background-color: #eee;
+        /*background-color: #fafafa;*/
+    }
+
+    .about-us {
+        background: #fff;
+        margin: 0px;
+        padding: 30px 40px;
+        border-top: 10px solid #4888b6;
+        border-radius: 0px;
+        -webkit-box-shadow: 0px 16px 30px rgba(0, 0, 0, 0.4);
+        box-shadow: 0px 16px 30px rgba(0, 0, 0, 0.4);
+        /*-webkit-box-shadow: 0 0 16px 12px rgba(0, 0, 0, 0.3);
+    box-shadow: 0 0 30px 12px rgba(0, 0, 0, 0.3);*/
+    }
+
+    @media(min-width:991.98px) {
+        .about-us:hover {
+            -ms-transform: scale(1.5); /* IE 9 */
+            -webkit-transform: scale(1.5); /* Safari 3-8 */
+            transform: scale(1.05);
+            transition-duration: 0.5s;
+        }
+    }
+
+    @media(min-width:1300px) {
+        .about-us:hover {
+            -ms-transform: scale(1.5); /* IE 9 */
+            -webkit-transform: scale(1.5); /* Safari 3-8 */
+            transform: scale(1.1);
+            transition-duration: 0.5s;
+            z-index: 10;
+        }
+    }
+
+    .container-email-subscribe .form-control {
+        padding: 20px 20px;
+        height:50px;
+        border-radius: 50px;
+        font-size: 17px;
+    }
+
+.container-email-subscribe button {
+    height: 50px;
+    border-radius: 50px;
+    font-size: 17px;
+}
+
+    .customer {
+        /*background: #f6f6f6;*/
+        margin: 40px 0px;
+        padding: 20px 0px;
+    }
+
+    .customer-individual {
+        padding: 10px 4px 20px 4px;
+        /*due to z-index 3 these items gets behind*/
+        z-index: 3;
+    }
+
+    @media(min-width:991.98px) {
+        .customer-individual:hover {
+            -ms-transform: scale(1.5); /* IE 9 */
+            -webkit-transform: scale(1.5); /* Safari 3-8 */
+            transform: scale(1.2);
+            transition-duration: 0.5s;
+            -webkit-box-shadow: 0px 16px 30px rgba(0, 0, 0, 0.4);
+            box-shadow: 0px 16px 30px rgba(0, 0, 0, 0.4);
+            background: #fff;
+            /*due to z-index 4 this item gets ahead also do not forget to add bgcolor:#fff;*/
+            z-index: 4;
+            padding: 30px 4px;
+        }
+    }
+
+    /*Brand Page*/
+
+    /*Common CSS*/
+    input.form-control, select.form-control, textarea.form-control {
+        font-size: 16px;
+    }
+
+        input.form-control:focus, select.form-control:focus, textarea.form-control:focus {
+            border-color: #5b5b5b;
+            box-shadow: none;
+        }
+
+
+    .light-background-with-border {
+        background: #f6f6f6;
+        margin: 20px;
+        padding: 20px;
+        border: 2px solid #eee;
+        border-radius: 0px;
+    }
+
+    .custom-label {
+        font-size: 19px;
+        font-weight: 400;
+    }
+
+    .custom-checkbox {
+        margin: 10px 4px 0px 4px;
+        height: 24px;
+        width: 24px;
+        border: 2px solid #5b5b5b;
+    }
+
+    table thead tr th {
+        font-size: 17px;
+        font-weight: 400;
+        text-align: center;
+    }
+
+    table tr td {
+        font-size: 16px;
+        font-weight: 400;
+        text-align: center;
+    }
+
+    .status-message {
+        font-size: 17px;
+        color: #fff;
+    }
+
+    .field-validation-error {
+        font-size: 14px;
+    }
+
+    /*DataTables*/
+    .dataTables_wrapper .dataTables_filter input {
+        height: 30px;
+        border: 2px solid #9a9a9a;
+        font-size: 16px;
+        padding: 5px;
+    }
+
+        .dataTables_wrapper .dataTables_filter input[type="search"] {
+            outline-offset: 0px;
+        }
+
+        .dataTables_wrapper .dataTables_filter input:focus {
+            /*border: 1px solid #ff6a00;*/
+            outline:none;
+        }
+
+    /*Bootstrap Override At Brand Categories*/
+    .brand-category-list .list-group-item {
+        font-size: 14px;
+        background-color: #fff;
+    }
+
+        .brand-category-list .list-group-item:first-child {
+            background-color: #008cba;
+            color: #fff;
+        }
+
+    /*Bootstrap Override At Shopping Cart*/
+    .rate-device {
+        color: #888;
+    }
+
+
+    /*Bootstrap Override At Login Form*/
+.login-form, .forgot-password-form {
+    width: 350px;
+    background: #f6f6f6;
+    margin: 50px auto;
+    padding: 20px 15px 10px 15px;
+    box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.3);
+    border: 4px solid #008cba;
+    border-radius: 0px;
+}
+
+    @media(min-width:991.98px) {
+        .login-form, .forgot-password-form {
+            width: 450px;
+            margin: 100px auto;
+        }
+    }
+
+.register-form {
+    padding: 20px 15px 10px 15px;
+    background: #f6f6f6;
+    border: 4px solid #008cba;
+    border-radius: 0px;
+    box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.3);
+}
+
+    .login-form .form-control, .login-form .btn, 
+    .register-form .form-control, .register-form .btn {
+        border-radius: 12px;
+    }
+
+
+    ul.manage-nav > li {
+        margin: 0px;
+        padding: 0px;
+    }
+
+        ul.manage-nav > li a {
+            margin: 0px;
+            padding: 10px 16px;
+            font-size: 16px;
+        }
+
+        ul.manage-nav > li:hover a {
+            color: #fff;
+            background-color: #008cba;
+        }
+
+        ul.manage-nav > li a.active {
+            color: #fff;
+            background-color: #008cba;
+        }
+
+    /*Login Section*/
+    .sign-in .dropdown-menu {
+        padding: 0px;
+        margin: 0px;
+        width: auto;
+    }
+
+        /*Impt as we need to override the css property of the css*/
+        .sign-in .dropdown-menu.show {
+            transform: unset !important;
+            top: 30px !important;
+            left: -40px !important;
+        }
+
+        .sign-in .dropdown-menu .dropdown-item {
+            padding: 8px 12px;
+            color: #222;
+        }
+
+            .sign-in .dropdown-menu .dropdown-item:hover {
+                padding-left: 16px;
+                color: #ff6a00;
+                transition: 0.2s;
+                transition-delay: 0.0008s;
+                background-color: #dce0e4;
+            }
+
+
+    /*Wishlist Page*/
+    .wishlist-item {
+        padding: 10px 5px;
+        margin: 4px;
+        border: 2px solid #eee;
+        background-color: #f6f6f6;
+    }
+
+
+    @media (min-width:991.98px) {
+
+        .wishlist-container {
+            padding: 0px;
+            margin: 0px;
+            display: flex;
+            justify-content: space-between;
+        }
+
+        .wishlist-item {
+            padding: 10px;
+            margin: 5px;
+            width: 400px;
+            flex-grow: 1;
+        }
+    }
+
+    /*Shopping Page*/
+    .shopping-brand-filter-container {
+        margin: 0px;
+        padding: 4px;
+        background-color: #f6f6f6;
+        border: 2px solid #eee;
+        display: flex;
+        justify-content: space-between;
+        flex-wrap: wrap;
+        /*align-items: stretch;*/
+        width: 100%;
+    }
+
+    .shopping-brand-filter-item {
+        padding: 0px 2px;
+        margin: 5px 0px;
+        flex-grow: 1;
+        list-style-type: none;
+    }
+
+        .shopping-brand-filter-item a {
+            min-width: 120px;
+        }
+
+        /*Its not working, check it again*/
+        .shopping-brand-filter-item:active a {
+            background-color: #008cba;
+            color: #fff;
+        }
+
+
+    .map-contact {
+        height: 350px;
+        width: 100%;
+    }
+
+    .contact-address {
+        padding: 15px 15px 10px 15px;
+        margin: 2px 15px;
+        background-color: #f6f6f6;
+    }
+
+        .contact-address address {
+            font-size: 17px;
+        }
+
+
+.accordion-brand {
+    background-color: #f6f6f6;
+    color: #555;
+    cursor: pointer;
+    padding: 18px;
+    width: 100%;
+    border: none;
+    text-align: left;
+    outline: none;
+    font-size: 16px;
+    /*transition-duration: 0.2s;*/
+    /*For Arrow I have used Flex*/
+    display: flex;
+    justify-content: space-between;
+}
+
+    .accordion-brand.active, .accordion-brand:hover {
+        background-color: #eee;
+    }
+
+    .accordion-brand:focus {
+        background-color: #eee;
+        outline:none;
+    }
+
+.panel {
+    padding: 0 18px;
+    display: none;
+    background-color: white;
+    overflow: hidden;
+}
+
+.arrow {
+    border: solid #555;
+    border-width: 0 3px 3px 0;
+    display: inline-block;
+    padding: 3px;
+}
+
+.up {
+    transform: rotate(-135deg);
+    -webkit-transform: rotate(-135deg);
+}
+
+.down {
+    transform: rotate(45deg);
+    -webkit-transform: rotate(45deg);
+}
+
+
+/*Start-Customer Order Tracking*/
+.track-recent-order {
+    padding:20px 0px;
+    background-color: #f6f6f6;
+}
+
+.search-container {
+    padding: 5px;
+    border: 1px solid #444;
+    border-radius: 60px;
+    background-color: #fff;
+    display: flex;
+    flex-direction:row;
+    flex-basis:0px;
+    align-items: center;
+}
+
+    .search-container > input {
+        margin-left: 30px;
+        color: #444;
+        font-size: 20px;
+        height: 50px;
+        border: none;
+        min-width:120px;
+        flex-grow:1;
+    }
+
+    .search-container button {
+        border: none;
+        border-radius: 60px;
+        height: 50px;
+        min-width: 120px;
+        flex-shrink:0;
+    }
+
+    @media (max-width:767.98px){
+        .search-container {
+            padding: 2px;
+        }
+
+            .search-container > input {
+                margin-left: 20px;
+                font-size: 19px;
+                height: 40px;
+            }
+
+            .search-container button {
+                border-radius: 60px;
+                height: 40px;
+                min-width: 120px;
+            }
+    }
+
+    .search-container > input:focus {
+        outline: none;
+    }
+
+#progressbar{
+    padding-left:0px;
+    margin:30px 0px;
+    /*color:#008cba;
+    overflow:hidden;*/
+    /*I want to equally adjust li so used flex*/
+    display:flex;
+}
+
+    #progressbar li {
+        list-style-type: none;
+        font-size: 13px;
+        position: relative;
+        font-weight: 400;
+        /*width: 25%;*/
+        /*float: left;*/
+        flex-grow: 1;
+    }
+
+    /*#progressbar .step0:before {
+        font-family: FontAwesome\5 Free;
+        font-weight:900;
+        content: "1";
+        color: #fff
+    }*/
+
+    #progressbar li:before {
+        width: 40px;
+        height: 40px;
+        line-height: 45px;
+        display: block;
+        font-size: 20px;
+        font-weight: 900;
+        color: #fff;
+        background: #C5CAE9;
+        border-radius: 50%;
+        margin: auto;
+        padding: 0px;
+    }
+
+    #progressbar .step1:before {
+        content: "1";
+    }
+
+    #progressbar .step2:before {
+        content: "2";
+    }
+
+    #progressbar .step3:before {
+        content: "3";
+    }
+
+    #progressbar .step4:before {
+        content: "4";
+    }
+
+    #progressbar li:after {
+        content: '';
+        width: 100%;
+        height: 12px;
+        background: #C5CAE9;
+        position: absolute;
+        left: 0;
+        top: 16px;
+        z-index: -1
+    }
+
+    #progressbar li:last-child:after {
+        border-top-right-radius: 10px;
+        border-bottom-right-radius: 10px;
+        position: absolute;
+        left: -50%
+    }
+
+    /*#progressbar li:nth-child(2):after,
+    #progressbar li:nth-child(3):after {
+        left: -50%
+    }*/
+
+    #progressbar li:first-child:after {
+        border-top-left-radius: 10px;
+        border-bottom-left-radius: 10px;
+        position: absolute;
+        left: 50%
+    }
+
+
+    #progressbar li.active:before,
+    #progressbar li.active:after {
+        background: #008cba;
+    }
+
+    /*#progressbar li.active:before {
+        font-family: FontAwesome;
+        content: "Passed"
+    }*/
+
+/*.icon {
+    width: 60px;
+    height: 60px;
+    margin-right: 15px
+}
+
+.icon-content {
+    padding-bottom: 20px
+}
+
+@media screen and (max-width: 992px) {
+    .icon-content {
+        width: 50%;
+    }
+}
+
+/*Start-Customer Order Tracking*/
+
+
+/*My Order History*/
+.container-orderHistory {
+    background-color: #f6f6f6;
+    padding-bottom:20px;
+    height:100%;
+}
+
+.bg-white-orderHistory{
+    background-color:#fff;
+}
+
+.bg-white-orderHistory hr{
+    margin:0px;
+}
+
+    .bg-white-orderHistory h5 {
+        font-size: 15px;
+    }
+
+/*Developer Page*/
+/*.developer-profile{
+    position:sticky;
+}*/
