@@ -1,42 +1,64 @@
-﻿@model ComputerHouse.Models.ViewModels.ShoppingListBrandListVM
+﻿@model ComputerHouse.Models.ViewModels.ShoppingListVM
 @{
     ViewData["Title"] = "Index";
 }
 
 
 <div class="container">
-    @*First Show without using acrodonion
-        <div class="row">
-            <ul class="shopping-brand-filter-container">
-                <li class="shopping-brand-filter-item"><a asp-action="Index"
-                        asp-route-brandName="" class="btn btn-lg btn-outline-primary p-2">All</a></li>
-                @foreach (var item in Model.BrandList)
-                {
-                    <li class="shopping-brand-filter-item"><a asp-action="Index" asp-route-brandName="@item.Name"
-                        class="btn btn-outline-primary nav-link">@item.Name</a></li>
-                }
-            </ul>
-        </div>*@
-
     @*If you have more than one selecting categories than you iterate here.*@
     <div class="row">
-        <a class="btn accordion-brand"><h5 class="d-inline">Click To Select Brand</h5><span><i class="arrow down"></i></span></a>
-        <div class="panel">
-            <div class="row">
-                <ul class="shopping-brand-filter-container">
-                    <li class="shopping-brand-filter-item">
-                        <a asp-action="Index"
-                           asp-route-brandName="" class="btn btn-outline-primary nav-link">All</a>
-                    </li>
-                    @foreach (var item in Model.BrandList)
-                    {
-                        <li class="shopping-brand-filter-item">
-                            <a asp-action="Index" asp-route-brandName="@item.Name"
-                               class="btn btn-outline-primary nav-link">@item.Name</a>
-                        </li>
-                    }
-                </ul>
-            </div>
+        <a class="btn accordion-brand"><h5 class="d-inline">Search Product</h5><span><i class="arrow down"></i></span></a>
+        <div class="col-12 panel">
+            <header class="px-0">
+                <div class="row ">
+                    @*<ul class="shopping-brand-filter-container">*@
+                    @*<li class="shopping-brand-filter-item">
+                            <a asp-action="Index"
+                               asp-route-brandName="" class="btn btn-outline-primary nav-link">All</a>
+                        </li>*@
+                    @*@foreach (var item in Model.BrandList)
+                        {
+                            <li class="shopping-brand-filter-item">
+                                <a asp-action="Index" asp-route-brandName="@item.Name"
+                                   class="btn btn-outline-primary nav-link">@item.Name</a>
+
+                            </li>
+                        }*@
+
+                    @*@foreach (var item in Model.BrandList)
+                        {
+                        <form asp-controller="Shoppings" asp-action="Index">
+                            <input value="@item.Name" type="submit" class="btn btn-outline-primary nav-link" name="brandName" />
+                        </form>
+                        }*@
+                    @*</ul>*@
+                    <div class="col">
+                        <div class="container">
+                            <form method="post" asp-action="Index">
+                                <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+                                <div class="row">
+                                    <div class="col-md-10 offset-md-1 text-center pt-4">
+                                        <div class="search-container">
+                                            <input asp-for="SearchName" placeholder=@Model.SearchName.ToString() value="" />
+                                            @if (string.IsNullOrEmpty(Model.SearchName))
+                                            {
+                                                <button type="submit" class="btn btn-lg btn-primary">Search</button>
+                                            }
+                                            else
+                                            {
+                                                <button type="submit" value="Reset" class="btn btn-lg btn-success">Reset</button>
+                                            }
+                                        </div>
+                                        <span asp-validation-for="SearchName" class="text-danger"></span>
+                                    </div>
+                                </div>
+                            </form>
+                            <br />
+                        </div>
+                    </div>
+
+                </div>
+            </header>
         </div>
     </div>
 
@@ -51,7 +73,7 @@
                         @{
                             var base64 = Convert.ToBase64String(item.Image);
                             var imgSrc = string.Format("data:image/jpg;base64,{0}", base64);
-                                         //This part is concating two string.
+                            //This part is concating two string.
                         }
                         <img class="card-img-top p-2" src="@imgSrc" alt="Card image cap" style="height:250px; width:100%;" />
                         <div class="card-body text-center">
@@ -164,13 +186,7 @@
         });
     }
 
-    //$('.sometrigger').click(function () {
-    //    $('#target').toggleClass('fa-angle-down');
-    //    $('#target').toggleClass('fa-angle-up');
-    //});
-
-
-    function quickView(id) {
+        function quickView(id) {
         var isOk = false;
         var error = "";
         var response = "";
@@ -218,7 +234,7 @@
                     var price = formatter.format(response.price) // "$1,000.00"
                     $("#modal-device-price").text(price);
 
-                    $("#features").attr("href","/Customer/Shoppings/Detail/" + id);
+                    $("#features").attr("href", "/Customer/Shoppings/Detail/" + id);
 
                     //For appending the image of the device
                     //$("img-device").attr('src', response.image);

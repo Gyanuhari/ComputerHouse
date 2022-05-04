@@ -11,7 +11,7 @@ namespace ComputerHouse.Areas.Customer.Controllers
             return View();
         }
 
-        public IActionResult AboutDeveloper()
+        public IActionResult SiteDescriptions()
         {
             return View(new ContactDeveloper());
         }

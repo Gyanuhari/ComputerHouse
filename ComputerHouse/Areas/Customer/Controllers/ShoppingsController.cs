@@ -8,6 +8,7 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using System.Collections.Generic;
+using System.Globalization;
 using System.Linq;
 using System.Security.Claims;
 using System.Threading.Tasks;
@@ -24,33 +25,30 @@ namespace ComputerHouse.Areas.Customer.Controllers
             _dbContext = dbContext;
         }
 
-        public async Task<IActionResult> Index(string brandName=null)
+        public async Task<IActionResult> Index(string searchName)
         {
-            var brandList = await _dbContext.Brands.ToListAsync();
-            var deviceList = await _dbContext.Devices
-                    .Include(d => d.Brand)
-                    .Include(d => d.BrandCategory)
-                    .Include(d => d.OperatingSystem)
-                    .ToListAsync();
+            //var brandList = await _dbContext.Brands.ToListAsync();
+            IQueryable<Device> query = _dbContext.Devices
+                                       .Include(d => d.Brand)
+                                       .Include(d => d.BrandCategory)
+                                       .Include(d => d.OperatingSystem);
 
-            ShoppingListBrandListVM shoppingListBrandList = new ShoppingListBrandListVM
+            if (!string.IsNullOrEmpty(searchName))
             {
-                BrandList = brandList,
-                DeviceList = deviceList
+                query = query.Where(d => d.Name.ToLower().Trim().Contains(searchName.ToLower().Trim()));
 
-            };
-
-
-            if (brandName != null)
-            {
-                var devices = deviceList.Where(d => d.Brand.Name.ToLower().Trim().Contains(brandName.ToLower().Trim())).ToList();
-                shoppingListBrandList.DeviceList = devices;
-
-                return View(shoppingListBrandList);
             }
 
+            //TextInfo textInfo = new CultureInfo("en-US", false).TextInfo;
 
-            return View(shoppingListBrandList);
+            ShoppingListVM shoppingList = new ShoppingListVM
+            {
+                DeviceList = await query.ToListAsync(),
+                //SearchName = string.IsNullOrEmpty(searchName) ? "" : textInfo.ToTitleCase(searchName)
+                SearchName = string.IsNullOrEmpty(searchName) ? "" : searchName
+            };
+
+            return View(shoppingList);
         }
 
         //Adding devices to CartItems and Session
@@ -150,18 +148,13 @@ namespace ComputerHouse.Areas.Customer.Controllers
         [Authorize]
         public async Task<IActionResult> AddToWishList(int id)
         {
-            //if(User.Identity.IsAuthenticated)
-            //{
-
-            //}
-
             var claimsIdentity = (ClaimsIdentity)this.User.Identity;
             var claim = claimsIdentity.FindFirst(ClaimTypes.NameIdentifier);
 
             var isInWishlist = await _dbContext.WishLists
                 .AnyAsync(w => w.DeviceId == id && w.UserId == claim.Value);
 
-            if(!isInWishlist)
+            if (!isInWishlist)
             {
                 WishList wishList = new WishList
                 {

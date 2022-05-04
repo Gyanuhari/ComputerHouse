@@ -38,6 +38,14 @@ namespace ComputerHouse.Data
                 .HasForeignKey(d => d.BrandId)
                 .IsRequired(true)
                 .OnDelete(DeleteBehavior.Restrict);
+
+            builder.Entity<Device>()
+                .HasOne<BrandCategory>(d => d.BrandCategory)
+                .WithMany()
+                .HasForeignKey(d => d.BrandCategoryId)
+                .IsRequired(true)
+                .OnDelete(DeleteBehavior.Restrict);
+
             //DeleteBehavior.Restrict, 
             //when the Brand is deleted it restricts deleting its dependent (BrandCategory, Device)
             //So, we first need to delete the dependent and then only we can delete Brand.
@@ -47,13 +55,6 @@ namespace ComputerHouse.Data
             //When Brand is Deleted its value in the dependent table will be null
             //DeleteBehavior.NoAction
             //Upon Deletion of Brand, no actions will be there in its value in the dependent entity
-
-            builder.Entity<Device>()
-                .HasOne<BrandCategory>(d => d.BrandCategory)
-                .WithMany()
-                .HasForeignKey(d => d.BrandCategoryId)
-                .IsRequired(true)
-                .OnDelete(DeleteBehavior.Restrict);
         }
     }
 }

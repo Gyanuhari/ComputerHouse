@@ -1,4 +1,5 @@
 ﻿using ComputerHouse.Data;
+using ComputerHouse.Extensions;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using System.Linq;
@@ -18,10 +19,12 @@ namespace ComputerHouse.ViewComponents
 
         public async Task<IViewComponentResult> InvokeAsync()
         {
-            var claimsIdentity = (ClaimsIdentity)this.User.Identity;
-            var claim = claimsIdentity.FindFirst(ClaimTypes.NameIdentifier);
+            //var claimsIdentity = (ClaimsIdentity)this.User.Identity;
+            //var claim = claimsIdentity.FindFirst(ClaimTypes.NameIdentifier);
 
-            var userFromDb =await _context.Users.Where(u => u.Id == claim.Value).FirstOrDefaultAsync();
+            var userId = UserIdentityExtensions.GetUserIdByClaimsPrincipal(HttpContext.User);
+
+            var userFromDb =await _context.Users.Where(u => u.Id == userId).FirstOrDefaultAsync();
 
             return View(userFromDb);
         }

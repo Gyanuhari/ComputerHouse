@@ -19,7 +19,7 @@ namespace ComputerHouse.Models
         [Required]
         [Display(Name = "Mobile Number")]
         [DataType(DataType.PhoneNumber)]
-        [RegularExpression(@"^([0-9]{10})$", ErrorMessage = "Please Enter Mobile Number.")]
+        [RegularExpression(@"^([0-9]{10})$", ErrorMessage = "Please Enter Valid Mobile Number.")]
         public string PhoneNumber { get; set; }
 
         [Required]

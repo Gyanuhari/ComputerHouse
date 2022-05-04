@@ -2,9 +2,9 @@
 
 namespace ComputerHouse.Models.ViewModels
 {
-    public class ShoppingListBrandListVM
+    public class ShoppingListVM
     {
         public IList<Device> DeviceList { get; set; }
-        public IList<Brand> BrandList { get; set; }
+        public string SearchName { get; set; }
     }
 }
