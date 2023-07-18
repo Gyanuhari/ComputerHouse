@@ -226,10 +226,26 @@
 </div>
 <!--End Of Modal Popup For Quick View-->
 
+<!--Instagram feeds-->
+        <div id="instafeed"></div>
+
+
 @section Scripts{
     @{ await Html.RenderPartialAsync("_ValidationScriptsPartial.cshtml");}
 
     <script type="text/javascript">
+
+        var feed = new Instafeed({
+            accessToken: 'IGQVJYY3ZACcXZARWUEzVDM5SklES0t2RDB0ck52cy1jc3EyVVg3Tmo0WG5DcThxc2QyYnVDaTBDMXQ5WkU0QWVzYzhUb2NGYm5WLXJybmxoVW56c1RRSktiOHBhbFZAzNXlHR1hsQTI3NTVBTFgySVl3ZAQZDZD',
+            limit: 12,
+            template: '<a href="{{link}}"><img title="{{caption}}" src="{{image}}" /></a>'
+        });
+        feed.run();
+
+        $(document).ready(function() {
+            var instaDiv = document.getElementById("instafeed");
+            instaDiv.siblings("a").addClass("col-12 col-md-6 col-lg-4");
+        });
 
         function quickView(deviceId) {
 

@@ -32,7 +32,7 @@ namespace ComputerHouse.Areas.Admin.Controllers
 
             if(userList!=null)
                 return View(userList);
-            else
+            
             return View();
 ;        }
 

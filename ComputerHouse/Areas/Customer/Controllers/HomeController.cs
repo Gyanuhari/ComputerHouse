@@ -48,8 +48,6 @@ namespace ComputerHouse.Controllers
                     await _context.EmailSubscriptions.AddAsync(emailSubscription);
                     await _context.SaveChangesAsync();
                 }
-
-                return RedirectToAction(nameof(Index));
             }
 
             return RedirectToAction(nameof(Index));

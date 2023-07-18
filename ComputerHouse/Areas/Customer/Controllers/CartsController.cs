@@ -2,12 +2,14 @@
 using ComputerHouse.Extensions;
 using ComputerHouse.Models;
 using ComputerHouse.Models.ViewModels;
+using ComputerHouse.Services.Background;
 using ComputerHouse.Utility;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity.UI.Services;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.DependencyInjection;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -20,15 +22,15 @@ namespace ComputerHouse.Areas.Customer.Controllers
     public class CartsController : Controller
     {
         private readonly ApplicationDbContext _context;
-        private readonly IEmailSender _emailSender;
+        private readonly IBackgroundTaskQueue _backgroundTaskQueue;
 
         [BindProperty]
         public CartItemAndOrderVM CartItemOrderVM { get; set; }
 
-        public CartsController(ApplicationDbContext context, IEmailSender emailSender)
+        public CartsController(ApplicationDbContext context, IBackgroundTaskQueue backgroundTaskQueue)
         {
             _context = context;
-            _emailSender = emailSender;
+            _backgroundTaskQueue = backgroundTaskQueue;
             CartItemOrderVM = new CartItemAndOrderVM
             {
                 OrderHeader=new OrderHeader()
@@ -47,6 +49,14 @@ namespace ComputerHouse.Areas.Customer.Controllers
                 List<CartItem> cartItems = new List<CartItem>();
 
                 sessionList= HttpContext.Session.GetObject<List<int>>(SD.SessionCart);
+
+                //_backgroundTaskQueue.QueueBackgroundWorkItem(async (serviceScopeFactory, token) => 
+                //{
+                //    using(var scope = serviceScopeFactory.CreateScope())
+                //    {
+                //        var service = scope.ServiceProvider.GetRequiredService<ApplicationDbContext>();
+                //    }
+                //});
 
                 foreach(var id in sessionList)
                 {
@@ -249,9 +259,18 @@ namespace ComputerHouse.Areas.Customer.Controllers
         [Authorize]
         public async Task<IActionResult> OrderConfirmation(int orderId)
         {
-            //Sending user notification email about the order placement
-            var userEmail = (await _context.OrderHeaders.Where(o => o.Id == orderId).FirstOrDefaultAsync()).Email;
-            await _emailSender.SendStatusEmailAsync(userEmail, SD.StatusPlaced, orderId.ToString());
+            _backgroundTaskQueue.QueueBackgroundWorkItem(async (serviceScopeFactory, token) =>
+            {
+                using(var scope = serviceScopeFactory.CreateScope())
+                {
+                    var dbContext = scope.ServiceProvider.GetRequiredService<ApplicationDbContext>();
+                    var emailSender = scope.ServiceProvider.GetRequiredService<IEmailSender>();
+
+                    //Sending user notification email about the order placement
+                    var userEmail = (await dbContext.OrderHeaders.Where(o => o.Id == orderId).FirstOrDefaultAsync()).Email;
+                    await emailSender.SendStatusEmailAsync(userEmail, SD.StatusPlaced, orderId.ToString());
+                }
+            });
 
             return View(orderId);
         }

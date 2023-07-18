@@ -49,9 +49,7 @@ namespace ComputerHouse.API
                 .FirstOrDefaultAsync();
 
             if (device == null)
-            {
                 return NotFound();
-            }
 
 
             //var base64 = Convert.ToBase64String(device.Image);

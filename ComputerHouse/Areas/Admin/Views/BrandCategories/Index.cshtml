@@ -226,8 +226,6 @@
         }
 
         function updateBrandCategory() {
-
-
             //updateEditData.empty;
             //We can also sent data creating json object however, the recepient in server should be of same type object
             //updateEditData = { brandId: editBrandNameDdlEle.val(), brandCategoryName: editBrandCategoryNameEle.val() }
@@ -280,6 +278,7 @@
                         if (isSaved) {
                             toastr.success(displayMessage);
                             setTimeout(function () {
+                            //$(window).scrollTop(0);
                             window.location.reload();
                             }, 2000);
                         } else {
@@ -347,8 +346,8 @@
                 type: 'GET',
                 data: { brandcategoryId: deleteId },
                 cache: false,
-                contentType: 'application/json; charset=UTF-8;',
-                dataType: 'json'
+                contentType: 'application/json; charset=UTF-8;',     // To indicate the type of the data we are sending, if we have strinified already no need.
+                dataType: 'json'                                     // For the type of data we are returning, if we are not returning anything, maybe in other place then don't need it.
             })
                 .done(function () {
                     isOk = true;

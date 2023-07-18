@@ -1,5 +1,8 @@
 ﻿using ComputerHouse.Data;
 using ComputerHouse.Services;
+using ComputerHouse.Services.Background;
+using ComputerHouse.Settings;
+using ComputerHouse.Web.Services;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
@@ -26,6 +29,11 @@ namespace ComputerHouse
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
+            // Configure options/settings
+            services.Configure<AzureBlobOptions>(Configuration.GetSection(AzureBlobOptions.SectionName));
+            services.Configure<MailOptions>(Configuration.GetSection(MailOptions.SectionName));
+
+            // Configure Cookie
             services.Configure<CookiePolicyOptions>(options =>
             {
                 // This lambda determines whether user consent for non-essential cookies is needed for a given request.
@@ -43,7 +51,13 @@ namespace ComputerHouse
                 .AddEntityFrameworkStores<ApplicationDbContext>();
 
             // Add application services.
+            services.AddSingleton<IBackgroundTaskQueue, BackgroundTaskQueue>();
             services.AddTransient<IEmailSender, EmailSender>();
+            services.AddTransient<IGlobalSettingsService, GlobalSettingsService>();
+
+            // Configure background task queues and recurring jobs.
+            services.AddHostedService<QueuedHostedService>();
+            services.AddHostedService<DownloadCleanupService>();
 
             services.AddSession(option =>
             {
@@ -51,6 +65,8 @@ namespace ComputerHouse
                 option.Cookie.HttpOnly = true;
                 //options.Cookie.IsEssential=true;
             });
+
+            // Can configure autovalidate antiforgeryToken for controller and views.
 
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_2);
         }
